@@ -3,7 +3,7 @@ Automatic-Module-Name: qnx.buildfile.lang
 Bundle-ManifestVersion: 2
 Bundle-Name: qnx.buildfile.lang
 Bundle-Vendor: My Company
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 1.0.2
 Bundle-SymbolicName: qnx.buildfile.lang; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.xtext,
