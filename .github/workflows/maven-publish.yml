@@ -34,7 +34,7 @@ jobs:
         gpg-private-key: ${{ secrets.GPG_SIGNING_KEY }}
         gpg-passphrase: MAVEN_GPG_PASSPHRASE
     - name: Build with Maven
-      run: mvn clean test install package
+      run: mvn clean test install package -Dtycho.mode=release
     - name: Set Version
       run: mvn versions:set -DnewVersion=${{ github.event.release.tag_name }}
     - name: Publish package
