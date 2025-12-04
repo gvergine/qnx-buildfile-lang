@@ -1,0 +1,24 @@
+# this is a comment
+
+[-optional]  # this is also a comment
+[search=${MKIFS_PATH}]  # here we use a variable'
+[code=u]
+[data=c]
+[uid=0 gid=0 perms=0555]
+
+# some deployment
+
+[uid=0 gid=0 perms=0555] bin/something=aarch64le/bin/some-thing
+[uid=0 gid=0 perms=0444] bin/something=aarch64le/bin/some-thing  # duplicate entry with different permissions
+[uid=0 gid=0 perms=0555] bin/something=aarch64le/bin/some-thing_else # some-thing will be overwritten
+[uid=53 gid=53 perms=0440] etc/my_plugin.so  = ../some_plugin/${VARIABLE}/file.so # uid/gid != 0, .. and variable in paths
+[uid=0 gid=0 perms=444] lib64/libc++.so.1=aarch64le/usr/lib/libc++.so.1  # using also + symbol
+
+# the following lines uses quotes for files containing spaces
+[type=link]/usr/share/doc/"This is a pdf file.pdf"=/mnt/usr/share/doc/"This is a pdf file.pdf"
+
+[uid=0 gid=0 perms=0400]/etc/inline_file.txt={
+	
+	# comment in the .txt file but not in the .build file
+    ... some text..
+}

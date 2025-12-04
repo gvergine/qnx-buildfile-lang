@@ -1,0 +1,28 @@
+Manifest-Version: 1.0
+Automatic-Module-Name: qnx.buildfile.lang
+Bundle-ManifestVersion: 2
+Bundle-Name: qnx.buildfile.lang
+Bundle-Vendor: My Company
+Bundle-Version: 1.0.0.qualifier
+Bundle-SymbolicName: qnx.buildfile.lang; singleton:=true
+Bundle-ActivationPolicy: lazy
+Require-Bundle: org.eclipse.xtext,
+ org.eclipse.xtext.xbase,
+ org.eclipse.equinox.common;bundle-version="3.19.0",
+ org.eclipse.emf.ecore,
+ org.eclipse.xtext.xbase.lib;bundle-version="2.39.0",
+ org.eclipse.emf.common,
+ org.antlr.runtime;bundle-version="[3.2.0,3.2.1)"
+Bundle-RequiredExecutionEnvironment: JavaSE-21
+Export-Package: qnx.buildfile.lang,
+ qnx.buildfile.lang.buildfileDSL.util,
+ qnx.buildfile.lang.generator,
+ qnx.buildfile.lang.serializer,
+ qnx.buildfile.lang.scoping,
+ qnx.buildfile.lang.buildfileDSL,
+ qnx.buildfile.lang.validation,
+ qnx.buildfile.lang.services,
+ qnx.buildfile.lang.buildfileDSL.impl,
+ qnx.buildfile.lang.parser.antlr.internal,
+ qnx.buildfile.lang.parser.antlr
+Import-Package: org.apache.log4j

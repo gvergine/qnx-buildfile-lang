@@ -1,0 +1,80 @@
+grammar qnx.buildfile.lang.BuildfileDSL
+    with org.eclipse.xtext.common.Terminals
+    hidden(SL_COMMENT,WS)
+
+generate buildfileDSL "http://www.buildfile.qnx/lang/BuildfileDSL"
+
+Model:
+	NL* statements+=Statement (NL+ statements+=Statement)* NL*
+;
+
+Statement:
+	AttributeStatement | DeploymentStatement
+;
+
+AttributeStatement:
+	attributesection=AttributeSection	
+;
+
+DeploymentStatement:
+	attributesection=AttributeSection? path=ALMOST_ANYTHING (assignment='='? content=Content)?
+;
+
+AttributeSection:
+	'[' attributes+=Attribute+ ']'
+;
+
+Attribute: BooleanAttribute | ValuedAttribute
+;
+BooleanAttribute:
+	enablement=Enablement name=ALMOST_ANYTHING
+;
+
+ValuedAttribute:
+	name=ALMOST_ANYTHING '=' value=ALMOST_ANYTHING
+;
+
+
+enum Enablement:
+	plus = '+' |
+	minus = '-'
+;
+
+Path:
+	value=ALMOST_ANYTHING
+;
+
+ContentBlock:
+	value=BLOCK
+;
+
+Content: Path | ContentBlock;
+
+
+/* Terminals */
+
+@Override
+terminal SL_COMMENT:
+    '#' !('\n' | '\r')*;
+terminal VARREF:
+	'${' ('\\}'| !'}')* '}'
+;
+
+terminal ALMOST_ANYTHING:
+	(STRING | VARREF | ID |INT | '.' | '/' | '*')
+	(STRING | VARREF | ID |INT | '.' | '/' | '*' | EXTRA_SYMBOL)*
+;
+
+terminal EXTRA_SYMBOL:
+	'-'| '+' |',' | ':'
+;
+
+terminal BLOCK:
+	'{' ('\\}'| !'}')* '}'
+;
+
+@Override
+terminal WS: (' ' | '\t')+;
+
+terminal NL: '\r'? '\n';
+
