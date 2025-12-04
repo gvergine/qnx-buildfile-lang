@@ -89,7 +89,7 @@
 				<configuration>
 					<target>
 						<artifact>
-							<groupId>qnx.buildfile.lang</groupId>
+						    <groupId>io.github.gvergine</groupId>
 							<artifactId>qnx.buildfile.lang.target</artifactId>
 							<version>${project.version}</version>
 						</artifact>
