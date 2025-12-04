@@ -341,6 +341,7 @@
       <configuration>
        <stylesheet>java</stylesheet>
        <doclint>none</doclint>
+		              <source>8</source>
       </configuration>
      </plugin>
      <plugin>
