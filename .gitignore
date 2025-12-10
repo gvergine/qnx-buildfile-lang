@@ -1,4 +1,6 @@
-target/
-generated/
-src-gen/
-xtend-gen/
+**/target/**
+**/generated/**
+**/src-gen/**
+**/xtend-gen/**
+
+!**/.gitkeep
