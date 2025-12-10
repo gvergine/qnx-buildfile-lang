@@ -3,7 +3,7 @@ Automatic-Module-Name: qnx.buildfile.lang.tests
 Bundle-ManifestVersion: 2
 Bundle-Name: qnx.buildfile.lang.tests
 Bundle-Vendor: My Company
-Bundle-Version: 1.0.2
+Bundle-Version: 1.0.3
 Bundle-SymbolicName: qnx.buildfile.lang.tests; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: qnx.buildfile.lang,

@@ -30,7 +30,7 @@
 
 
     <groupId>io.github.gvergine</groupId>
-	<version>1.0.2</version>
+	<version>1.0.3</version>
 	<artifactId>qnx.buildfile.lang.parent</artifactId>
 	<packaging>pom</packaging>
 
