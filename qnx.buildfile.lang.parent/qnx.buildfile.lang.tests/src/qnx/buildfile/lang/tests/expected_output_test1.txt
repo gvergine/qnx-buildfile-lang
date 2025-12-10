@@ -15,7 +15,7 @@ uid = 0
 gid = 0
 perms = 0555
 PATH: bin/something
-=
+true
 aarch64le/bin/some-thing
 
 DeploymentStatement
@@ -23,7 +23,7 @@ uid = 0
 gid = 0
 perms = 0444
 PATH: bin/something
-=
+true
 aarch64le/bin/some-thing
 
 DeploymentStatement
@@ -31,7 +31,7 @@ uid = 0
 gid = 0
 perms = 0555
 PATH: bin/something
-=
+true
 aarch64le/bin/some-thing_else
 
 DeploymentStatement
@@ -39,7 +39,7 @@ uid = 53
 gid = 53
 perms = 0440
 PATH: etc/my_plugin.so
-=
+true
 ../some_plugin/${VARIABLE}/file.so
 
 DeploymentStatement
@@ -47,13 +47,13 @@ uid = 0
 gid = 0
 perms = 444
 PATH: lib64/libc++.so.1
-=
+true
 aarch64le/usr/lib/libc++.so.1
 
 DeploymentStatement
 type = link
 PATH: /usr/share/doc/"This is a pdf file.pdf"
-=
+true
 /mnt/usr/share/doc/"This is a pdf file.pdf"
 
 DeploymentStatement
@@ -61,7 +61,7 @@ uid = 0
 gid = 0
 perms = 0400
 PATH: /etc/inline_file.txt
-=
+true
 {
 	
 	# comment in the .txt file but not in the .build file

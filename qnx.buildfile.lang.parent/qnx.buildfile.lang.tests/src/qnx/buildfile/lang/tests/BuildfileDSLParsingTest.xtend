@@ -58,7 +58,7 @@ class BuildfileDSLParsingTest {
 		
 		if (deploymentStatement.attributesection !== null) ret += deploymentStatement.attributesection.attributes.map[evaluate].join("\n")
 		ret += '\nPATH: ' + deploymentStatement.path + "\n"
-		if (deploymentStatement.assignment !== null) ret += deploymentStatement.assignment + "\n"
+		if (deploymentStatement.isAssignment()) ret += deploymentStatement.assignment + "\n"
 		if (deploymentStatement.content !== null) ret += evaluate(deploymentStatement.content) + "\n"
 		return ret
 		
@@ -78,7 +78,7 @@ class BuildfileDSLParsingTest {
 	
 	def static String evaluate(BooleanAttribute booleanAttribute)
 	{
-		 return booleanAttribute.enablement.name() + " " + booleanAttribute.name
+		 return (booleanAttribute.isEnabled() ? "PLUS" : "MINUS") + " " + booleanAttribute.name
 	}
 	
 	def static String evaluate(ValuedAttribute valuedAttribute)

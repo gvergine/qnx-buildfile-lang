@@ -17,7 +17,7 @@ AttributeStatement:
 ;
 
 DeploymentStatement:
-	attributesection=AttributeSection? path=ALMOST_ANYTHING (assignment='='? content=Content)?
+	attributesection=AttributeSection? path=ALMOST_ANYTHING ((assignment?='=')? content=Content)?
 ;
 
 AttributeSection:
@@ -26,18 +26,13 @@ AttributeSection:
 
 Attribute: BooleanAttribute | ValuedAttribute
 ;
+
 BooleanAttribute:
-	enablement=Enablement name=ALMOST_ANYTHING
+	(enabled?='+'|'-') name=ALMOST_ANYTHING
 ;
 
 ValuedAttribute:
 	name=ALMOST_ANYTHING '=' value=ALMOST_ANYTHING
-;
-
-
-enum Enablement:
-	plus = '+' |
-	minus = '-'
 ;
 
 Path:
@@ -50,9 +45,6 @@ ContentBlock:
 
 Content: Path | ContentBlock;
 
-
-/* Terminals */
-
 @Override
 terminal SL_COMMENT:
     '#' !('\n' | '\r')*;
@@ -62,15 +54,12 @@ terminal VARREF:
 
 terminal ALMOST_ANYTHING:
 	(STRING | VARREF | ID |INT | '.' | '/' | '*')
-	(STRING | VARREF | ID |INT | '.' | '/' | '*' | EXTRA_SYMBOL)*
-;
-
-terminal EXTRA_SYMBOL:
-	'-'| '+' |',' | ':'
+	(STRING | VARREF | ID |INT | '.' | '/' | '*' | '-'| '+' |',' | ':')*
 ;
 
 terminal BLOCK:
-	'{' ('\\}'| !'}')* '}'
+//	'{' NL ('\\}'| !'}')* NL '}'
+    '{' NL ( ('\\}'| !'}')* NL )? '}'
 ;
 
 @Override
