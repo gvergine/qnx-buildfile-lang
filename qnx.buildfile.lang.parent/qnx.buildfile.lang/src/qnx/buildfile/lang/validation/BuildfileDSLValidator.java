@@ -3,6 +3,11 @@
  */
 package qnx.buildfile.lang.validation;
 
+import org.eclipse.xtext.validation.Check;
+
+import qnx.buildfile.lang.attributes.AttributeKeywords;
+import qnx.buildfile.lang.buildfileDSL.Attribute;
+import qnx.buildfile.lang.buildfileDSL.BuildfileDSLPackage;
 
 /**
  * This class contains custom validation rules. 
@@ -11,15 +16,17 @@ package qnx.buildfile.lang.validation;
  */
 public class BuildfileDSLValidator extends AbstractBuildfileDSLValidator {
 	
-//	public static final String INVALID_NAME = "invalidName";
-//
-//	@Check
-//	public void checkGreetingStartsWithCapital(Greeting greeting) {
-//		if (!Character.isUpperCase(greeting.getName().charAt(0))) {
-//			warning("Name should start with a capital",
-//					BuildfileDSLPackage.Literals.GREETING__NAME,
-//					INVALID_NAME);
-//		}
-//	}
+	@Check
+	public void checkAttributes(Attribute attribute) {
+		if (!AttributeKeywords.ALL_ATTRIBUTE_KEYWORDS
+				.contains(attribute.getName()))
+		{
+			error("Attribute name \"" + attribute.getName() + "\" is not known",
+					BuildfileDSLPackage.Literals.ATTRIBUTE__NAME,
+					"invalidName");
+
+		}
+
+	}
 	
 }

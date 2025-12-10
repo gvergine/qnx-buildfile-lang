@@ -22,6 +22,8 @@ import qnx.buildfile.lang.buildfileDSL.Content
 import qnx.buildfile.lang.buildfileDSL.Path
 import qnx.buildfile.lang.buildfileDSL.ContentBlock
 
+import static extension qnx.buildfile.lang.Utils.*;
+
 @ExtendWith(InjectionExtension)
 @InjectWith(BuildfileDSLInjectorProvider)
 class BuildfileDSLParsingTest {
@@ -37,11 +39,11 @@ class BuildfileDSLParsingTest {
 	{
 		if (statement instanceof AttributeStatement)
 		{
-			return (statement as AttributeStatement).evaluate
+			return statement.asAttributeStatement.evaluate
 		}
 		else if (statement instanceof DeploymentStatement)
 		{
-			return (statement as DeploymentStatement).evaluate
+			return statement.asDeploymentStatement.evaluate
 		}
 	}
 	
@@ -68,11 +70,11 @@ class BuildfileDSLParsingTest {
 	{
 		if (attribute instanceof BooleanAttribute)
 		{
-			return (attribute as BooleanAttribute).evaluate
+			return attribute.asBooleanAttribute.evaluate
 		}
 		else if (attribute instanceof ValuedAttribute)
 		{
-			return (attribute as ValuedAttribute).evaluate
+			return attribute.asValuedAttribute.evaluate
 		}		
 	}
 	

@@ -1,0 +1,33 @@
+package qnx.buildfile.lang.attributes;
+
+public enum Mkqnx6fsValuedAttributeKeyword {
+	acl,
+	blksize,
+	cd,
+	cksum,
+	dom,
+	dperms,
+	drop,
+	filter,
+	gid,
+	max_sectors,
+	mtime,
+	namedom,
+	newdom,
+	num_blocks,
+	num_groups,
+	num_inodes,
+	num_sectors,
+	perms,
+	prefix,
+	reserve,
+	search,
+	sector_size,
+	sha256,
+	sha512,
+	type,
+	uid,
+	usage,
+	uuid,
+	vol_name
+}
