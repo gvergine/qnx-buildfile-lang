@@ -1,0 +1,112 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<name>QNX Buildfile Validator</name>
+	<description>A command line interface for validating QNX buildfiles</description>
+	<url>https://github.com/gvergine/qnx-buildfile-lang</url>
+
+	<licenses>
+		<license>
+		<name>Apache License, Version 2.0</name>
+		<url>https://www.apache.org/licenses/LICENSE-2.0</url>
+		<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<scm>
+		<connection>https://github.com/gvergine/qnx-buildfile-lang.git</connection>
+		<developerConnection>https://github.com/gvergine/qnx-buildfile-lang.git</developerConnection>
+		<url>https://github.com/gvergine/qnx-buildfile-lang</url>
+	</scm>
+
+	<developers>
+		<developer>
+		<id>gvergine</id>
+		<name>Giovanni Vergine</name>
+		<email>verginegiovanni@gmail.com</email>
+		<url>https://gvergine.github.io</url>
+		</developer>
+	</developers>
+
+	<parent>
+	    <groupId>io.github.gvergine</groupId>
+		<artifactId>qnx.buildfile.lang.parent</artifactId>
+		<version>1.0.4</version>
+	</parent>
+	<artifactId>qnx.buildfile.lang.cli</artifactId>
+	<packaging>jar</packaging>
+    <dependencies>
+        <dependency>
+            <groupId>io.github.gvergine</groupId>
+            <artifactId>qnx.buildfile.lang</artifactId>
+            <version>1.0.4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>info.picocli</groupId>
+            <artifactId>picocli</artifactId>
+            <version>4.7.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.emf</groupId>
+            <artifactId>org.eclipse.emf.ecore</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.xtext</groupId>
+            <artifactId>org.eclipse.xtext</artifactId>
+            <version>2.34.0</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+
+            <!-- Build fat/executable jar -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.5.0</version>
+
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+
+                        <configuration>
+
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                            
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>qnx.buildfile.lang.cli.Main</mainClass>
+                                        <manifestEntries>
+                                            <Implementation-Version>${project.version}</Implementation-Version>
+                                        </manifestEntries>                                
+                                </transformer>
+                            </transformers>
+
+                            <finalName>QNXBuildfileValidator</finalName>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
+
+</project>
+
+

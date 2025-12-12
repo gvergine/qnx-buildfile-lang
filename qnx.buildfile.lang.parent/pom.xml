@@ -30,7 +30,7 @@
 
 
     <groupId>io.github.gvergine</groupId>
-	<version>1.0.3</version>
+	<version>1.0.4</version>
 	<artifactId>qnx.buildfile.lang.parent</artifactId>
 	<packaging>pom</packaging>
 
@@ -38,8 +38,8 @@
 		<xtextVersion>2.39.0</xtextVersion>
 		<mwe2Version>2.22.0</mwe2Version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.source>21</maven.compiler.source>
-		<maven.compiler.target>21</maven.compiler.target>
+		<maven.compiler.source>17</maven.compiler.source>
+		<maven.compiler.target>17</maven.compiler.target>
 		<!-- Tycho settings -->
 		<tycho-version>4.0.12</tycho-version>
 		<!-- Define overridable properties for tycho-surefire-plugin -->
@@ -50,6 +50,7 @@
 	</properties>
 	<modules>
 		<module>qnx.buildfile.lang</module>
+		<module>qnx.buildfile.lang.cli</module>
 		<module>qnx.buildfile.lang.ide</module>
 		<module>qnx.buildfile.lang.ui</module>
 		<module>qnx.buildfile.lang.target</module>
@@ -324,81 +325,86 @@
 		</profile>
 
 <!-- needed to deploy to mavencentral -->
-
-		  <profile>
-   <id>release</id>
-   <build>
-    <plugins>
-     <plugin>
-      <groupId>org.sonatype.central</groupId>
-      <artifactId>central-publishing-maven-plugin</artifactId>
-      <version>0.4.0</version>
-      <extensions>true</extensions>
-      <configuration>
-       <publishingServerId>central</publishingServerId>
-       <tokenAuth>true</tokenAuth>
-       <autoPublish>true</autoPublish>
-      </configuration>
-     </plugin>
-     <plugin>
-      <groupId>org.apache.maven.plugins</groupId>
-      <artifactId>maven-source-plugin</artifactId>
-      <version>3.3.0</version>
-		 <configuration>
-    <classifier>maven-release-sources</classifier>
-</configuration>
-      <executions>
-       <execution>
-        <id>attach-sources</id>
-        <phase>verify</phase>
-        <goals>
-         <goal>jar-no-fork</goal>
-        </goals>
-       </execution>
-      </executions>
-     </plugin>
-     <plugin>
-      <groupId>org.apache.maven.plugins</groupId>
-      <artifactId>maven-javadoc-plugin</artifactId>
-      <version>3.11.2</version>
-      <executions>
-       <execution>
-        <id>attach-javadoc</id>
-        <goals>
-         <goal>jar</goal>
-        </goals>
-       </execution>
-      </executions>
-      <configuration>
-       <stylesheet>java</stylesheet>
-       <doclint>none</doclint>
-		              <source>8</source>
-      </configuration>
-     </plugin>
-     <plugin>
-      <groupId>org.apache.maven.plugins</groupId>
-      <artifactId>maven-gpg-plugin</artifactId>
-      <version>3.1.0</version>
-      <executions>
-       <execution>
-        <id>sign-artifacts</id>
-        <phase>verify</phase>
-        <goals>
-         <goal>sign</goal>
-        </goals>
-       </execution>
-      </executions>
-      <configuration>
-       <gpgArguments>
-        <arg>--pinentry-mode</arg>
-        <arg>loopback</arg>
-       </gpgArguments>
-      </configuration>
-     </plugin>
-    </plugins>
-   </build>
-  </profile>
-		
+	
+	<profile>
+	   <id>release</id>
+	   <modules>
+	   	<module>qnx.buildfile.lang</module>
+		<module>qnx.buildfile.lang.cli</module>
+		<module>qnx.buildfile.lang.repository</module>
+	   </modules>
+	   <build>
+	    <plugins>
+	     <plugin>
+	      <groupId>org.sonatype.central</groupId>
+	      <artifactId>central-publishing-maven-plugin</artifactId>
+	      <version>0.4.0</version>
+	      <extensions>true</extensions>
+	      <configuration>
+	       <publishingServerId>central</publishingServerId>
+	       <tokenAuth>true</tokenAuth>
+	       <autoPublish>true</autoPublish>
+	      </configuration>
+	     </plugin>
+	     <plugin>
+	      <groupId>org.apache.maven.plugins</groupId>
+	      <artifactId>maven-source-plugin</artifactId>
+	      <version>3.3.0</version>
+		  <configuration>
+	    		<classifier>maven-release-sources</classifier>
+		  </configuration>
+	      <executions>
+	       <execution>
+	        <id>attach-sources</id>
+	        <phase>verify</phase>
+	        <goals>
+	         <goal>jar-no-fork</goal>
+	        </goals>
+	       </execution>
+	      </executions>
+	     </plugin>
+	     <plugin>
+	      <groupId>org.apache.maven.plugins</groupId>
+	      <artifactId>maven-javadoc-plugin</artifactId>
+	      <version>3.11.2</version>
+	      <executions>
+	       <execution>
+	        <id>attach-javadoc</id>
+	        <goals>
+	         <goal>jar</goal>
+	        </goals>
+	       </execution>
+	      </executions>
+	      <configuration>
+	       <stylesheet>java</stylesheet>
+	       <doclint>none</doclint>
+			              <source>8</source>
+	      </configuration>
+	     </plugin>
+	     <plugin>
+	      <groupId>org.apache.maven.plugins</groupId>
+	      <artifactId>maven-gpg-plugin</artifactId>
+	      <version>3.1.0</version>
+	      <executions>
+	       <execution>
+	        <id>sign-artifacts</id>
+	        <phase>verify</phase>
+	        <goals>
+	         <goal>sign</goal>
+	        </goals>
+	       </execution>
+	      </executions>
+	      <configuration>
+	       <gpgArguments>
+	        <arg>--pinentry-mode</arg>
+	        <arg>loopback</arg>
+	       </gpgArguments>
+	      </configuration>
+	     </plugin>
+	    </plugins>
+	   </build>
+	  </profile>
+			
 	</profiles>
 
 	<dependencies>

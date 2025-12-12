@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature id="qnx.buildfile.lang.feature"
 	label="BuildfileDSL Feature "
-	version="1.0.3">
+	version="1.0.4">
 	<plugin
 			id="qnx.buildfile.lang"
 			download-size="0"

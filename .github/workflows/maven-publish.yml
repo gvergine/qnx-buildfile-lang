@@ -22,10 +22,10 @@ jobs:
     steps:
 
     - uses: actions/checkout@v4
-    - name: Set up JDK 21
+    - name: Set up JDK 17
       uses: actions/setup-java@v4
       with:
-        java-version: '21'
+        java-version: '17'
         distribution: 'temurin'
         settings-path: ${{ github.workspace }} # location for the settings.xml file
         server-id: central
@@ -35,6 +35,8 @@ jobs:
         gpg-passphrase: MAVEN_GPG_PASSPHRASE
     - name: Set Version
       run: mvn versions:set -DnewVersion=${{ github.event.release.tag_name }}
+    - name: Test
+      run: mvn clean test install package
     - name: Publish package
       run: mvn -P release --batch-mode deploy -s $GITHUB_WORKSPACE/settings.xml 
       env:
