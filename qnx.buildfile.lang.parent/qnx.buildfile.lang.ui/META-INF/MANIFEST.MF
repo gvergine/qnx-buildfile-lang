@@ -17,7 +17,7 @@ Require-Bundle: qnx.buildfile.lang,
  org.eclipse.compare,
  org.eclipse.xtext.builder
 Import-Package: org.apache.log4j
-Bundle-RequiredExecutionEnvironment: JavaSE-21
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: qnx.buildfile.lang.ui.contentassist,
  qnx.buildfile.lang.ui.quickfix,
  qnx.buildfile.lang.ui.internal
