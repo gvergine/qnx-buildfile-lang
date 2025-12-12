@@ -35,10 +35,8 @@ jobs:
         gpg-passphrase: MAVEN_GPG_PASSPHRASE
     - name: Set Version
       run: mvn versions:set -DnewVersion=${{ github.event.release.tag_name }}
-    - name: Test
-      run: mvn clean test install package
     - name: Publish package
-      run: mvn -P release --batch-mode deploy -s $GITHUB_WORKSPACE/settings.xml 
+      run: mvn -P release --batch-mode clean install verify package deploy -s $GITHUB_WORKSPACE/settings.xml 
       env:
         MAVEN_USERNAME: ${{ secrets.CENTRAL_TOKEN_USERNAME }}
         MAVEN_PASSWORD: ${{ secrets.CENTRAL_TOKEN_PASSWORD }}
