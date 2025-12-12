@@ -328,11 +328,6 @@
 	
 	<profile>
 	   <id>release</id>
-	   <modules>
-	   	<module>qnx.buildfile.lang</module>
-		<module>qnx.buildfile.lang.cli</module>
-		<module>qnx.buildfile.lang.repository</module>
-	   </modules>
 	   <build>
 	    <plugins>
 	     <plugin>
