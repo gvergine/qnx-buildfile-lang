@@ -131,8 +131,8 @@
                                 </transformer>
                             </transformers>
 
-                            <finalName>QNXBuildfileValidator</finalName>
-                        </configuration>
+							<shadedArtifactAttached>true</shadedArtifactAttached>
+							<shadedClassifierName>shaded</shadedClassifierName>                        </configuration>
                     </execution>
                 </executions>
             </plugin>
