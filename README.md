@@ -6,9 +6,9 @@ The rest of this README is for developers who want to contribute to the grammar.
 
 ## Prerequisites
 
-- Recent Linux with jdk 21
+- Recent Linux with jdk 17
 - Eclipse IDE for DSL Developers
-- Docker (for compiling command line)
+  Maven (minimum version 3.9)
 
 ## Compile from Eclipse
 
@@ -17,8 +17,14 @@ The rest of this README is for developers who want to contribute to the grammar.
 
 ## Compile from command line
 
-Using docker:
 ```
-./docker_mvn.sh clean install
+mvn clean install
 ```
 
+## Release
+
+```
+mvn -P release clean deploy -DskipPublishing=true
+```
+
+Test and publish manually on Sonatype.

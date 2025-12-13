@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<name>QNX Buildfile Lang</name>
@@ -7,9 +8,9 @@
 
 	<licenses>
 		<license>
-		<name>Apache License, Version 2.0</name>
-		<url>https://www.apache.org/licenses/LICENSE-2.0</url>
-		<distribution>repo</distribution>
+			<name>Apache License, Version 2.0</name>
+			<url>https://www.apache.org/licenses/LICENSE-2.0</url>
+			<distribution>repo</distribution>
 		</license>
 	</licenses>
 
@@ -21,15 +22,15 @@
 
 	<developers>
 		<developer>
-		<id>gvergine</id>
-		<name>Giovanni Vergine</name>
-		<email>verginegiovanni@gmail.com</email>
-		<url>https://gvergine.github.io</url>
+			<id>gvergine</id>
+			<name>Giovanni Vergine</name>
+			<email>verginegiovanni@gmail.com</email>
+			<url>https://gvergine.github.io</url>
 		</developer>
 	</developers>
 
 
-    <groupId>io.github.gvergine</groupId>
+	<groupId>io.github.gvergine</groupId>
 	<version>1.0.4</version>
 	<artifactId>qnx.buildfile.lang.parent</artifactId>
 	<packaging>pom</packaging>
@@ -118,7 +119,7 @@
 				<configuration>
 					<target>
 						<artifact>
-						    <groupId>io.github.gvergine</groupId>
+							<groupId>io.github.gvergine</groupId>
 							<artifactId>qnx.buildfile.lang.target</artifactId>
 							<version>${project.version}</version>
 						</artifact>
@@ -147,7 +148,8 @@
 								<id>org.eclipse.xtext.logging</id>
 								<versionRange>0.0.0</versionRange>
 							</requirement>
-							<!-- to get the org.eclipse.osgi.compatibility.state plugin if the target
+							<!-- to get the org.eclipse.osgi.compatibility.state
+							plugin if the target
 								platform is Luna or later. (backward compatible with kepler and previous
 								versions) see https://bugs.eclipse.org/bugs/show_bug.cgi?id=492149 -->
 							<requirement>
@@ -209,7 +211,8 @@
 						<useProjectSettings>false</useProjectSettings>
 					</configuration>
 				</plugin>
-				<!-- to skip running (and compiling) tests use commandline flag: -Dmaven.test.skip
+				<!-- to skip running (and compiling) tests use commandline flag:
+				-Dmaven.test.skip
 					To skip tests, but still compile them, use: -DskipTests
 					To allow all tests in a pom to pass/fail, use commandline flag: -fae (fail
 					at end) -->
@@ -218,8 +221,10 @@
 					<artifactId>tycho-surefire-plugin</artifactId>
 					<version>${tycho-version}</version>
 					<configuration>
-						<!-- THE FOLLOWING LINE MUST NOT BE BROKEN BY AUTOFORMATTING -->
-						<argLine>${platformSystemProperties} ${systemProperties} ${moduleProperties} ${additionalTestArguments}</argLine>
+						<!-- THE FOLLOWING LINE MUST NOT BE BROKEN BY
+						AUTOFORMATTING -->
+						<argLine>${platformSystemProperties} ${systemProperties}
+							${moduleProperties} ${additionalTestArguments}</argLine>
 						<failIfNoTests>false</failIfNoTests>
 						<useUIHarness>false</useUIHarness>
 					</configuration>
@@ -230,7 +235,8 @@
 	<repositories>
 		<repository>
 			<id>codehaus-snapshots</id>
-			<name>disable dead 'Codehaus Snapshots' repository, see https://bugs.eclipse.org/bugs/show_bug.cgi?id=481478</name>
+			<name>disable dead 'Codehaus Snapshots' repository, see
+				https://bugs.eclipse.org/bugs/show_bug.cgi?id=481478</name>
 			<url>http://nexus.codehaus.org/snapshots/</url>
 			<releases>
 				<enabled>false</enabled>
@@ -239,7 +245,8 @@
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
-		<!-- This must be disabled explicitly, otherwise it is enabled by https://github.com/mojohaus/mojo-parent 
+		<!-- This must be disabled explicitly, otherwise it is enabled by
+		https://github.com/mojohaus/mojo-parent 
 			which is taken from exec-maven-plugin from at least version 1.6.0 -->
 		<repository>
 			<id>ossrh-snapshots</id>
@@ -269,7 +276,8 @@
 	<pluginRepositories>
 		<pluginRepository>
 			<id>codehaus-snapshots</id>
-			<name>disable dead 'Codehaus Snapshots' repository, see https://bugs.eclipse.org/bugs/show_bug.cgi?id=481478</name>
+			<name>disable dead 'Codehaus Snapshots' repository, see
+				https://bugs.eclipse.org/bugs/show_bug.cgi?id=481478</name>
 			<url>http://nexus.codehaus.org/snapshots/</url>
 			<releases>
 				<enabled>false</enabled>
@@ -324,82 +332,84 @@
 			</properties>
 		</profile>
 
-<!-- needed to deploy to mavencentral -->
-	
-	<profile>
-	   <id>release</id>
-	   <build>
-	    <plugins>
-	     <plugin>
-	      <groupId>org.sonatype.central</groupId>
-	      <artifactId>central-publishing-maven-plugin</artifactId>
-	      <version>0.4.0</version>
-	      <extensions>true</extensions>
-	      <configuration>
-	       <publishingServerId>central</publishingServerId>
-	       <tokenAuth>true</tokenAuth>
-	       <autoPublish>true</autoPublish>
-	      </configuration>
-	     </plugin>
-	     <plugin>
-	      <groupId>org.apache.maven.plugins</groupId>
-	      <artifactId>maven-source-plugin</artifactId>
-	      <version>3.3.0</version>
-		  <configuration>
-	    		<classifier>maven-release-sources</classifier>
-		  </configuration>
-	      <executions>
-	       <execution>
-	        <id>attach-sources</id>
-	        <phase>verify</phase>
-	        <goals>
-	         <goal>jar-no-fork</goal>
-	        </goals>
-	       </execution>
-	      </executions>
-	     </plugin>
-	     <plugin>
-	      <groupId>org.apache.maven.plugins</groupId>
-	      <artifactId>maven-javadoc-plugin</artifactId>
-	      <version>3.11.2</version>
-	      <executions>
-	       <execution>
-	        <id>attach-javadoc</id>
-	        <goals>
-	         <goal>jar</goal>
-	        </goals>
-	       </execution>
-	      </executions>
-	      <configuration>
-	       <stylesheet>java</stylesheet>
-	       <doclint>none</doclint>
-			              <source>8</source>
-	      </configuration>
-	     </plugin>
-	     <plugin>
-	      <groupId>org.apache.maven.plugins</groupId>
-	      <artifactId>maven-gpg-plugin</artifactId>
-	      <version>3.1.0</version>
-	      <executions>
-	       <execution>
-	        <id>sign-artifacts</id>
-	        <phase>verify</phase>
-	        <goals>
-	         <goal>sign</goal>
-	        </goals>
-	       </execution>
-	      </executions>
-	      <configuration>
-	       <gpgArguments>
-	        <arg>--pinentry-mode</arg>
-	        <arg>loopback</arg>
-	       </gpgArguments>
-	      </configuration>
-	     </plugin>
-	    </plugins>
-	   </build>
-	  </profile>
-			
+		<!-- needed to deploy to mavencentral -->
+
+		<profile>
+			<id>release</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.sonatype.central</groupId>
+						<artifactId>central-publishing-maven-plugin</artifactId>
+						<version>0.6.0</version>
+						<extensions>true</extensions>
+						<configuration>
+							<publishingServerId>central</publishingServerId>
+							<skipPublishing>${skipPublishing}</skipPublishing>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-source-plugin</artifactId>
+						<version>3.3.0</version>
+						<configuration>
+							<classifier>maven-release-sources</classifier>
+						</configuration>
+						<executions>
+							<execution>
+								<id>attach-sources</id>
+								<phase>package</phase>
+								<goals>
+									<goal>jar-no-fork</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<version>3.11.2</version>
+						<executions>
+							<execution>
+								<id>attach-javadoc</id>
+								<phase>package</phase>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<doclint>none</doclint>
+							<source>8</source>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<version>3.1.0</version>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+								<configuration>
+									<keyname>832EBB3588540626</keyname>
+								</configuration>
+							</execution>
+						</executions>
+						<configuration>
+							<gpgArguments>
+								<arg>--pinentry-mode</arg>
+								<arg>loopback</arg>
+							</gpgArguments>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
 	</profiles>
 
 	<dependencies>

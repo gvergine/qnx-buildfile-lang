@@ -33,30 +33,29 @@
   <build>
     <plugins>
       <plugin>
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>tycho-source-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>disable-tycho-sources</id>
+            <phase>none</phase>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
         <artifactId>maven-source-plugin</artifactId>
-        <version>3.3.1</version>
+        <version>3.3.0</version>
         <executions>
           <execution>
             <id>attach-sources</id>
+            <phase>package</phase>
             <goals>
               <goal>jar-no-fork</goal>
             </goals>
           </execution>
         </executions>
-      </plugin>
-      <plugin>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>3.6.3</version>
-        <executions>
-          <execution>
-            <id>attach-javadocs</id>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-          </execution>
-        </executions>
         <configuration>
-          <failOnError>false</failOnError>
+          <classifier>sources</classifier>
         </configuration>
       </plugin>
       <plugin>
