@@ -10,11 +10,11 @@ import org.eclipse.xtext.validation.Issue;
 
 import picocli.CommandLine;
 import picocli.CommandLine.Option;
-import qnx.buildfile.lang.BuildfileDSLStandaloneHelper;
+import qnx.buidfile.lang.utils.ParsingResult;
+import qnx.buidfile.lang.utils.SimpleParser;
 
 public class Main implements Callable<Integer>
 {
-
 	@Option(
 			names = "-i",
 			description = "buildfile(s)",
@@ -25,9 +25,9 @@ public class Main implements Callable<Integer>
 
 	@Override
 	public Integer call() throws IOException
-	{
+	{		
 		Integer failures = 0;
-		BuildfileDSLStandaloneHelper buildfileDSLStandaloneHelper = new BuildfileDSLStandaloneHelper();
+		SimpleParser parser = new SimpleParser();
 
 		for (String filename : inputs)
 		{
@@ -39,14 +39,15 @@ public class Main implements Callable<Integer>
 				throw new FileNotFoundException(filename);
 			}
 
-			BuildfileDSLStandaloneHelper.ParsingResult parseResult = buildfileDSLStandaloneHelper.parse(file);        	
+			ParsingResult parseResult = parser.parse(file);        	
 			parseResult.issues.forEach(issue -> printIssue(filename, issue));
 
 			if (parseResult.hasErrors())
 			{
 				failures++;
 			}
-			System.out.println("Done - " + failures + " failures");
+			
+			System.out.println("Done - " + failures + " failure" + ((failures == 1) ? "" : "s"));
 		}
 
 		return failures;  
@@ -60,7 +61,7 @@ public class Main implements Callable<Integer>
 	public static void main(String[] args)
 	{
 		String version = Main.class.getPackage().getImplementationVersion();
-		System.out.println("This is the QNX Buildfile Validator version " + version);
+		System.out.println("QNX Buildfile Validator version " + version);
 		int exitCode = new CommandLine(new Main()).execute(args);        
 		System.exit(exitCode == 0 ? 0 : 1);
 	}
