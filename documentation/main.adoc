@@ -1,0 +1,500 @@
+= qnx-buildfile-lang
+:toc: left
+:toclevels: 3
+:sectnums:
+:icons: font
+:source-highlighter: rouge
+
+toc::[]
+
+ifdef::backend-pdf[]
+endif::[]
+ifndef::backend-pdf[]
+[TIP]
+.PDF documention
+====
+Download the pdf version of this documentation here: link:qnx-buildfile-lang-documentation.pdf[qnx-buildfile-lang-documentation.pdf].
+====
+endif::[]
+
+
+== Home
+
+Working with QNX buildfiles can be error-prone and time-consuming. Syntax or semantic issues often show up late in the build process, slowing developers down and making debugging harder. It is often a struggle to enforce systematically additional policies, whether company or project-specific.
+
+`qnx-buildfile-lang` project solves this by providing:
+
+* A complete Xtext grammar for QNX buildfiles, ensuring instant syntax validation, syntax highlighting and code completion inside Eclipse
+* A reference executable jar for generic validation of buildfiles. Maven library that enables programmatic parsing, additinal opportunities for semantic validation, automation, and CI checks.
+* A standalone Maven library that can be used to write your own java-based tooling, enabling programmatic parsing, additional semantic validation, automation, and CI checks.
+
+This project was built to make QNX development smoother, more reliable, and more automatable for teams working on embedded or automotive platforms.
+
+=== Key Features
+
+QNX buildfile grammar implemented using Xtext
+
+* Available as an Eclipse Plugin
+** Syntax highlighting
+** Real-time syntax validation
+** Better readability and safer editing
+
+* Available as a standalone Java library
+** Enables parstng of buildfiles programmatically
+** Integrate into custom tooling
+** Add validation to CI/CD pipelines
+** Distributed via Maven Central
+
+* Reference validator included
+
+Lightweight, dependency-friendly, and easy to integrate
+
+=== Project Status & Compatibility
+
+* Minimum JRE required: 17
+
+=== Resources
+
+* Source code: link:https://github.com/gvergine/qnx-buildfile-lang[]
+* Issue tracker: link:https://github.com/gvergine/qnx-buildfile-lang/issues[]
+* License: TBD
+
+== The Eclipse plugin
+
+=== Installation
+
+Download the Eclipse repository as a ZIP from Maven Central: link:https://repo1.maven.org/maven2/io/github/gvergine/qnx.buildfile.lang.repository/1.0.5/qnx.buildfile.lang.repository-1.0.5.zip[]
+
+In Eclipse:
+
+* Help → Install New Software → Add → Archive…
+* Select the ZIP file and proceed with installation
+* Restart Eclipse
+
+
+[NOTE]
+====
+Support for Momentics IDE is work in progress
+====
+
+=== Usage
+
+Open any QNX .build file to enjoy syntax checking and highlighting:
+
+
+
+image::images/qnx-buildfile-eclipse-plugin.png[]
+
+
+
+[CAUTION]
+
+.Xtext Nature
+
+====
+
+Remember to allow the Xtext Nature to your Eclipse project
+
+====
+
+
+
+
+
+
+
+== The reference executable JAR
+
+
+
+Ready-to-use executable jar for command line validation is available as qnx.buildfile.lang.cli-1.0.4-shaded.jar (java 17+ required):
+
+
+
+
+
+=== Installation
+
+Download the plugin ZIP from Maven Central.
+
+In Eclipse:
+
+- Help → Install New Software → Add → Archive…
+
+- Select the ZIP file and proceed with installation
+
+- Restart Eclipse
+
+
+
+=== Usage
+
+[IMPORTANT]
+
+.Java Version
+
+====
+
+Make sure you use a JRE version 17+
+
+====
+
+
+
+You can specify multiple files on the same command line, e.g:
+
+
+
+[source,shell]
+
+----
+
+$ java -jar qnx.buildfile.lang.cli-1.0.4-shaded.jar -i path/to/first.build -i path/to/second.build
+
+This is the QNX Buildfile Validator version 1.0.4
+
+Processing path/to/first.build
+
+Processing path/to/second.build
+
+Done - 0 failures
+
+$ echo $?
+
+0
+
+----
+
+
+
+Errors and warnings will be reported on standard error, and exit code will be 1 if any error occourred:
+
+[source,shell]
+
+----
+
+$ java TBD EXAMPLE
+
+0
+
+----
+
+
+
+
+
+== Getting Started with Java library
+
+
+
+=== Installation
+
+
+
+You can use the latest version (e.g. `1.0.5`) via Maven Central:
+
+
+
+[source,xml]
+
+----
+
+<dependency>
+
+<groupId>io.github.gvergine</groupId>
+
+<artifactId>qnx.buildfile.lang</artifactId>
+
+<version>1.0.5</version>
+
+</dependency>
+
+----
+
+
+
+Or any latest release, check which one at Sonatype.
+
+
+
+=== Key concepts to remember
+
+
+
+Class diagram, interesting classes
+
+
+
+=== Examples
+
+
+
+This is an example of a standalone parser:
+
+
+
+[source,java]
+
+----
+
+import qnx.buildfile.lang.BuildfileDSLStandaloneHelper;
+
+import org.eclipse.xtext.validation.Issue;
+
+
+
+// ...
+
+
+
+BuildfileDSLStandaloneHelper buildfileDSLStandaloneHelper = new BuildfileDSLStandaloneHelper();
+
+
+
+// ...
+
+
+
+File file = new File(filename);
+
+BuildfileDSLStandaloneHelper.ParsingResult parseResult = buildfileDSLStandaloneHelper.parse(file);
+
+
+
+if (parseResult.hasErrors())
+
+// ...
+
+----
+
+
+
+== Language Fundamentals
+
+
+
+=== Core Concepts
+
+Explain the mental model: files, directives, evaluation order.
+
+
+
+=== File Structure
+
+Explain layout, sections, and organization.
+
+
+
+=== Syntax Basics
+
+* Comments
+
+* Whitespace
+
+* Identifiers
+
+
+
+=== Paths and Permissions
+
+Explain how paths and permissions are handled.
+
+
+
+=== Variables and Macros
+
+Explain definition, scope, and usage.
+
+
+
+=== Conditionals and Includes
+
+Explain conditional logic and file inclusion (if supported).
+
+
+
+== Language Reference
+
+
+
+=== Grammar Overview
+
+High-level grammar description or EBNF.
+
+
+
+=== Directives Reference
+
+
+
+==== directive_name
+
+[source]
+
+----
+
+directive_name [arguments]
+
+----
+
+Description, parameters, and usage examples.
+
+
+
+==== another_directive
+
+[source]
+
+----
+
+another_directive [arguments]
+
+----
+
+Description and examples.
+
+
+
+=== Keywords and Tokens
+
+List of reserved keywords and tokens.
+
+
+
+=== Diagnostics and Errors
+
+Common error messages and how to resolve them.
+
+
+
+== Tooling and Integration
+
+
+
+=== Editor Support
+
+* Syntax highlighting
+
+* Diagnostics
+
+* Autocompletion
+
+
+
+=== Command Line Interface
+
+[source]
+
+----
+
+qnx-buildfile-lang [options] <file>
+
+----
+
+Explain commands and options.
+
+
+
+=== CI and Automation
+
+How to integrate into automated pipelines.
+
+
+
+=== Interoperability
+
+Using alongside traditional QNX buildfiles and migration notes.
+
+
+
+== Examples and Recipes
+
+
+
+=== Minimal System Image
+
+Explain a simple real-world example.
+
+
+
+=== Multi-Component System
+
+More advanced example.
+
+
+
+=== Conditional Builds
+
+Example using conditionals.
+
+
+
+=== Migration Example
+
+How to migrate an existing buildfile.
+
+
+
+== Design and Internals
+
+
+
+=== Design Goals
+
+Explain core principles and trade-offs.
+
+
+
+=== Architecture Overview
+
+Parser, validator, and tooling structure.
+
+
+
+=== Extensibility
+
+How the language or tools can be extended.
+
+
+
+== Contributing
+
+
+
+=== Development Setup
+
+How to build and run the project locally.
+
+
+
+=== Project Structure
+
+High-level repository layout.
+
+
+
+=== Adding New Features
+
+Guidelines for extending grammar or diagnostics.
+
+
+
+=== Coding Standards
+
+Style and contribution rules.
+
+
+
+== FAQ and Troubleshooting
+
+
+
+=== Frequently Asked Questions
+
+Common questions and answers.
+
+
+
+=== Troubleshooting
+
+Common problems and solutions.
