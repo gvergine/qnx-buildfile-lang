@@ -1,14 +1,14 @@
-package qnx.buidfile.lang.utils;
+package qnx.buildfile.lang.utils;
 
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import qnx.buidfile.lang.utils.Walker.IWalker;
 import qnx.buildfile.lang.buildfileDSL.DeploymentStatement;
 import qnx.buildfile.lang.buildfileDSL.Model;
 import qnx.buildfile.lang.buildfileDSL.Path;
 import qnx.buildfile.lang.buildfileDSL.ValuedAttribute;
+import qnx.buildfile.lang.utils.Walker.IWalker;
 
 public class VariableSubstitutor
 {

@@ -10,8 +10,8 @@ import org.eclipse.xtext.validation.Issue;
 
 import picocli.CommandLine;
 import picocli.CommandLine.Option;
-import qnx.buidfile.lang.utils.ParsingResult;
-import qnx.buidfile.lang.utils.SimpleParser;
+import qnx.buildfile.lang.utils.Parser;
+import qnx.buildfile.lang.utils.ParsingResult;
 
 public class Main implements Callable<Integer>
 {
@@ -27,7 +27,7 @@ public class Main implements Callable<Integer>
 	public Integer call() throws IOException
 	{		
 		Integer failures = 0;
-		SimpleParser parser = new SimpleParser();
+		Parser parser = new Parser();
 
 		for (String filename : inputs)
 		{

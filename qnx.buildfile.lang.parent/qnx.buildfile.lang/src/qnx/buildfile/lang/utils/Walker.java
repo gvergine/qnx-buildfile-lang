@@ -1,4 +1,4 @@
-package qnx.buidfile.lang.utils;
+package qnx.buildfile.lang.utils;
 
 import qnx.buildfile.lang.buildfileDSL.AttributeSection;
 import qnx.buildfile.lang.buildfileDSL.AttributeStatement;

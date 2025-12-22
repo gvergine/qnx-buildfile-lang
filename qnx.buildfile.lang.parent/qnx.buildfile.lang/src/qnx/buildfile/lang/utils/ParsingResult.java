@@ -1,4 +1,4 @@
-package qnx.buidfile.lang.utils;
+package qnx.buildfile.lang.utils;
 
 import java.util.List;
 
