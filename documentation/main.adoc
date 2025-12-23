@@ -1,9 +1,14 @@
-= qnx-buildfile-lang
+= qnx-buildfile-lang documentation {release_version}
 :toc: left
 :toclevels: 3
 :sectnums:
 :icons: font
 :source-highlighter: rouge
+
+[.small]
+Author: Giovanni Vergine, verginegiovanni@gmail.com
+[.small]
+Date: {doc_date}
 
 toc::[]
 
@@ -17,8 +22,9 @@ Download the pdf version of this documentation here: link:qnx-buildfile-lang-doc
 ====
 endif::[]
 
+<<<
 
-== Home
+== qnx-buildfile-lang
 
 Working with QNX buildfiles can be error-prone and time-consuming. Syntax or semantic issues often show up late in the build process, slowing developers down and making debugging harder. It is often a struggle to enforce systematically additional policies, whether company or project-specific.
 
@@ -32,22 +38,20 @@ This project was built to make QNX development smoother, more reliable, and more
 
 === Key Features
 
-QNX buildfile grammar implemented using Xtext
+`qnx-buildfile-lang` is a set of java-based tooling implemented using link:https://eclipse.dev/Xtext/[Xtext] for parsing link:https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.building/topic/buildfiles/buildfile.html[QNX Buildfiles] 
 
 * Available as an Eclipse Plugin
 ** Syntax highlighting
 ** Real-time syntax validation
 ** Better readability and safer editing
 
+* Available as command line standalone executable jar
+** Enables parsing of buildfiles programmatically
+** Useful for addding validation to CI/CD pipelines
+
 * Available as a standalone Java library
-** Enables parstng of buildfiles programmatically
 ** Integrate into custom tooling
-** Add validation to CI/CD pipelines
 ** Distributed via Maven Central
-
-* Reference validator included
-
-Lightweight, dependency-friendly, and easy to integrate
 
 === Project Status & Compatibility
 
@@ -55,446 +59,272 @@ Lightweight, dependency-friendly, and easy to integrate
 
 === Resources
 
-* Source code: link:https://github.com/gvergine/qnx-buildfile-lang[]
-* Issue tracker: link:https://github.com/gvergine/qnx-buildfile-lang/issues[]
-* License: TBD
+* Source code: link:https://github.com/gvergine/qnx-buildfile-lang[qnx-buildfile-lang]
+* Issue tracker: link:https://github.com/gvergine/qnx-buildfile-lang/issues[qnx-buildfile-lang/issues]
+* License: link:https://github.com/gvergine/qnx-buildfile-lang/blob/master/LICENSE[Apache License Version 2.0, January 2004]
+
+<<<
 
 == The Eclipse plugin
 
+Like most of the Xtext-based projects, an Eclipse Feature is available and is deployed to Maven. Follow the steps below to understand how to get it, install it and use it.
+
 === Installation
 
-Download the Eclipse repository as a ZIP from Maven Central: link:https://repo1.maven.org/maven2/io/github/gvergine/qnx.buildfile.lang.repository/1.0.5/qnx.buildfile.lang.repository-1.0.5.zip[]
+Download the Eclipse Repository as a ZIP from Maven Central.
+Look for `qnx.buildfile.lang.repository-{Version}.zip` in link:https://central.sonatype.com/artifact/io.github.gvergine/qnx.buildfile.lang.repository[Maven Central]
 
-In Eclipse:
+E.g. latest version `{release_version}` can be found at link:https://repo1.maven.org/maven2/io/github/gvergine/qnx.buildfile.lang.repository/{release_version}/[]
+
+Once downloded, follow the usual steps to install it in Eclipse:
 
 * Help → Install New Software → Add → Archive…
 * Select the ZIP file and proceed with installation
 * Restart Eclipse
 
-
 [NOTE]
 ====
-Support for Momentics IDE is work in progress
+Even if Momentics is Eclipse-based, support for Momentics IDE is still work in progress.
 ====
 
 === Usage
 
-Open any QNX .build file to enjoy syntax checking and highlighting:
+[CAUTION]
+.Xtext Nature
+====
+When opening a QNX .build file for the first time in an Eclipse project, Eclipse will ask if to allow the Xtext Nature for such project. This is mandatory to enable the editor.
+====
 
-
+Syntax checking and highlighting should be available as in the following picture:
 
 image::images/qnx-buildfile-eclipse-plugin.png[]
 
+<<<
 
+== The command line standalone executable jar
 
-[CAUTION]
+A ready-to-use executable jar for command line validation is available as well. This is mostly useful for integration in a script or in a CI/CD pipeline.
 
-.Xtext Nature
-
-====
-
-Remember to allow the Xtext Nature to your Eclipse project
-
-====
-
-
-
-
-
-
-
-== The reference executable JAR
-
-
-
-Ready-to-use executable jar for command line validation is available as qnx.buildfile.lang.cli-1.0.4-shaded.jar (java 17+ required):
-
-
-
+It supports the same validation rules of the Eclipse Plugin, but they are printed on the standard error, and the exit code will be 0 only if no errors are found.
 
 
 === Installation
+Download the command line standalone executable jar from Maven Central.
+Look for `qnx.buildfile.lang.cli-{Version}-shaded.jar` in link:https://central.sonatype.com/artifact/io.github.gvergine/qnx.buildfile.lang.cli[Maven Central]
 
-Download the plugin ZIP from Maven Central.
-
-In Eclipse:
-
-- Help → Install New Software → Add → Archive…
-
-- Select the ZIP file and proceed with installation
-
-- Restart Eclipse
-
+E.g. latest version `{release_version}` can be found at link:https://repo1.maven.org/maven2/io/github/gvergine/qnx.buildfile.lang.cli/{release_version}/[]
 
 
 === Usage
 
 [IMPORTANT]
-
 .Java Version
-
 ====
-
 Make sure you use a JRE version 17+
-
 ====
-
-
 
 You can specify multiple files on the same command line, e.g:
 
-
-
-[source,shell]
-
+[source,shell,subs="attributes,verbatim"]
+----
+java -jar qnx.buildfile.lang.cli-{release_version}-shaded.jar -i=<inputs>[,<inputs>...] [-i=<inputs>[,<inputs>...]]...
+  -i=<inputs>[,<inputs>...]
+         buildfile(s)
 ----
 
-$ java -jar qnx.buildfile.lang.cli-1.0.4-shaded.jar -i path/to/first.build -i path/to/second.build
+This example shows a succesful run:
 
-This is the QNX Buildfile Validator version 1.0.4
-
+[source,shell,subs="attributes,verbatim"]
+----
+$ java -jar qnx.buildfile.lang.cli-{release_version}-shaded.jar -i path/to/first.build -i path/to/second.build
+QNX Buildfile Validator version {release_version}
 Processing path/to/first.build
-
 Processing path/to/second.build
-
 Done - 0 failures
-
 $ echo $?
-
 0
-
 ----
-
 
 
 Errors and warnings will be reported on standard error, and exit code will be 1 if any error occourred:
 
-[source,shell]
-
+[source,shell,subs="attributes,verbatim"]
+----
+$ java -jar qnx.buildfile.lang.cli-{release_version}-shaded.jar -i path/to/error.build
+QNX Buildfile Validator version {release_version}
+Processing path/to/error.build
+ERROR at path/to/error.build:11: Attribute name "gidh" is not known
+Done - 1 failure
+$ echo $?
+1
 ----
 
-$ java TBD EXAMPLE
+<<<
 
-0
+== Getting Started with the standalone Java library
 
-----
-
-
-
-
-
-== Getting Started with Java library
-
-
+The standalone Java library allows you to build your own java-based tooling. Typical use cases are:
+- extending the validation rules for enforcing additional policies
+- integrate with java-based environments (e.g. Tomcat, Java-based GUIs)
+- generation (e.g. xml or csv representation of the buildfile for further processing with non-java tools)
 
 === Installation
 
-
-
-You can use the latest version (e.g. `1.0.5`) via Maven Central:
-
-
-
-[source,xml]
-
+You can get the latest version via Maven Central:
+[source,xml,subs="attributes,verbatim"]
 ----
-
 <dependency>
-
-<groupId>io.github.gvergine</groupId>
-
-<artifactId>qnx.buildfile.lang</artifactId>
-
-<version>1.0.5</version>
-
+  <groupId>io.github.gvergine</groupId>
+  <artifactId>qnx.buildfile.lang</artifactId>
+  <version>{release_version}</version>
 </dependency>
-
 ----
-
-
-
-Or any latest release, check which one at Sonatype.
-
-
 
 === Key concepts to remember
 
+When using a parser library, it is important first to understand the Abstract Syntax Tree that the parser will produce in memory.
+When the AST is known, will be easy to access any part of the model and to validate it or generate output accordingly.
 
+There are multiple ways to see and remember the AST.
 
-Class diagram, interesting classes
+* If you are familiar with the Xtext grammar notation, you can see understand the AST simply link:https://github.com/gvergine/qnx-buildfile-lang/blob/master/qnx.buildfile.lang.parent/qnx.buildfile.lang/src/qnx/buildfile/lang/BuildfileDSL.xtext[looking at it]. 
+* Javadoc is generated and available via Maven as well
+* Referring to the following class diagram:
 
-
+image::images/buildfileDSL_class_diagram.png[]
 
 === Examples
 
+==== Parsing programmatically:
 
+[source,java]
+----
+import qnx.buildfile.lang.utils.Parser;
+import qnx.buildfile.lang.utils.ParsingResult;
 
-This is an example of a standalone parser:
+// ...
 
+Parser parser = new Parser();
+File file = new File(filename);
+ParsingResult parseResult = parser.parse(file);
+
+if (parseResult.hasErrors()) {
+    // ...
+
+----
+
+==== Writing and using a custom validator:
+
+[source,java]
+----
+import org.eclipse.xtext.validation.Check;
+import qnx.buildfile.lang.attributes.AttributeKeywords;
+import qnx.buildfile.lang.buildfileDSL.Attribute;
+import qnx.buildfile.lang.buildfileDSL.BuildfileDSLPackage;
+import qnx.buildfile.lang.validation.BuildfileDSLValidator;
+
+public class CustomBuildfileDSLValidator extends BuildfileDSLValidator
+{
+	@Check
+	public void checkAttributes(Attribute attribute)
+    {
+		if (!AttributeKeywords.ALL_ATTRIBUTE_KEYWORDS
+				.contains(attribute.getName()))
+		{
+			error("Attribute name \"" + attribute.getName() + "\" is unknown",
+					BuildfileDSLPackage.Literals.ATTRIBUTE__NAME,
+					"invalidName");
+		}
+	}
+}
+----
+
+For example, the following custom validator adds a warning for duplicate paths:
+
+[source,java]
+----
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.eclipse.xtext.validation.Check;
+
+import qnx.buildfile.lang.buildfileDSL.BuildfileDSLPackage;
+import qnx.buildfile.lang.buildfileDSL.DeploymentStatement;
+import qnx.buildfile.lang.buildfileDSL.Model;
+import qnx.buildfile.lang.utils.Walker;
+import qnx.buildfile.lang.utils.Walker.IWalker;
+import qnx.buildfile.lang.validation.BuildfileDSLValidator;
+
+public class CustomBuildfileDSLValidator extends BuildfileDSLValidator {
+
+	private final static Walker walker = new Walker();
+
+	@Check
+	public void checkDuplicates(Model model) {
+		Map<String,List<DeploymentStatement>> duplicates = new HashMap<>();
+
+		walker.walk(model, new IWalker() {
+			@Override
+			public void found(DeploymentStatement deploymentStatement)
+			{
+				String path = deploymentStatement.getPath();
+
+				if (duplicates.containsKey(path))
+				{
+					duplicates.get(path).add(deploymentStatement);
+				}
+				else
+				{
+					List<DeploymentStatement> l = new ArrayList<>();
+					l.add(deploymentStatement);
+					duplicates.put(path, l);
+				}
+
+			};
+		});
+
+		duplicates.forEach((path, deployments) ->{
+			if (deployments.size() > 1)
+			{
+				for (DeploymentStatement deployment : deployments)
+				{
+					warning("Duplicate path " + path, deployment,  BuildfileDSLPackage.Literals.DEPLOYMENT_STATEMENT__PATH, "duplicatePath");
+				}
+			}
+
+		});
+
+	}
+}
+----
 
 
 [source,java]
-
 ----
-
-import qnx.buildfile.lang.BuildfileDSLStandaloneHelper;
-
-import org.eclipse.xtext.validation.Issue;
-
-
+import qnx.buildfile.lang.utils.Parser;
+import qnx.buildfile.lang.utils.ParsingResult;
 
 // ...
 
-
-
-BuildfileDSLStandaloneHelper buildfileDSLStandaloneHelper = new BuildfileDSLStandaloneHelper();
-
-
-
-// ...
-
-
-
+Parser parser = new Parser(CustomBuildfileDSLValidator.class);
 File file = new File(filename);
+ParsingResult parseResult = parser.parse(file);
 
-BuildfileDSLStandaloneHelper.ParsingResult parseResult = buildfileDSLStandaloneHelper.parse(file);
+if (parseResult.hasErrors()) {
+    // ...
 
+----
 
+==== Resolve the environment variables:
 
-if (parseResult.hasErrors())
+[source,java]
+----
+import qnx.buildfile.lang.utils.VariableSubstitutor;
 
 // ...
-
+final Map<String, String> envMap = System.getenv();
+VariableSubstitutor vs = new VariableSubstitutor();
+vs.substituteVariables(model, envMap);
 ----
-
-
-
-== Language Fundamentals
-
-
-
-=== Core Concepts
-
-Explain the mental model: files, directives, evaluation order.
-
-
-
-=== File Structure
-
-Explain layout, sections, and organization.
-
-
-
-=== Syntax Basics
-
-* Comments
-
-* Whitespace
-
-* Identifiers
-
-
-
-=== Paths and Permissions
-
-Explain how paths and permissions are handled.
-
-
-
-=== Variables and Macros
-
-Explain definition, scope, and usage.
-
-
-
-=== Conditionals and Includes
-
-Explain conditional logic and file inclusion (if supported).
-
-
-
-== Language Reference
-
-
-
-=== Grammar Overview
-
-High-level grammar description or EBNF.
-
-
-
-=== Directives Reference
-
-
-
-==== directive_name
-
-[source]
-
-----
-
-directive_name [arguments]
-
-----
-
-Description, parameters, and usage examples.
-
-
-
-==== another_directive
-
-[source]
-
-----
-
-another_directive [arguments]
-
-----
-
-Description and examples.
-
-
-
-=== Keywords and Tokens
-
-List of reserved keywords and tokens.
-
-
-
-=== Diagnostics and Errors
-
-Common error messages and how to resolve them.
-
-
-
-== Tooling and Integration
-
-
-
-=== Editor Support
-
-* Syntax highlighting
-
-* Diagnostics
-
-* Autocompletion
-
-
-
-=== Command Line Interface
-
-[source]
-
-----
-
-qnx-buildfile-lang [options] <file>
-
-----
-
-Explain commands and options.
-
-
-
-=== CI and Automation
-
-How to integrate into automated pipelines.
-
-
-
-=== Interoperability
-
-Using alongside traditional QNX buildfiles and migration notes.
-
-
-
-== Examples and Recipes
-
-
-
-=== Minimal System Image
-
-Explain a simple real-world example.
-
-
-
-=== Multi-Component System
-
-More advanced example.
-
-
-
-=== Conditional Builds
-
-Example using conditionals.
-
-
-
-=== Migration Example
-
-How to migrate an existing buildfile.
-
-
-
-== Design and Internals
-
-
-
-=== Design Goals
-
-Explain core principles and trade-offs.
-
-
-
-=== Architecture Overview
-
-Parser, validator, and tooling structure.
-
-
-
-=== Extensibility
-
-How the language or tools can be extended.
-
-
-
-== Contributing
-
-
-
-=== Development Setup
-
-How to build and run the project locally.
-
-
-
-=== Project Structure
-
-High-level repository layout.
-
-
-
-=== Adding New Features
-
-Guidelines for extending grammar or diagnostics.
-
-
-
-=== Coding Standards
-
-Style and contribution rules.
-
-
-
-== FAQ and Troubleshooting
-
-
-
-=== Frequently Asked Questions
-
-Common questions and answers.
-
-
-
-=== Troubleshooting
-
-Common problems and solutions.
