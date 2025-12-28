@@ -1,12 +1,18 @@
-= qnx-buildfile-lang documentation {release_version}
 :toc: left
 :toclevels: 3
 :sectnums:
 :icons: font
 :source-highlighter: rouge
 
+ifdef::backend-pdf[]
+= qnx-buildfile-lang documentation {release_version}
+endif::[]
+ifndef::backend-pdf[]
+= qnx-buildfile-lang {release_version}
+endif::[]
+
 [.small]
-Author: Giovanni Vergine, verginegiovanni@gmail.com
+Giovanni Vergine, verginegiovanni@gmail.com
 [.small]
 Date: {doc_date}
 
@@ -26,9 +32,9 @@ endif::[]
 
 == qnx-buildfile-lang
 
-Working with QNX buildfiles can be error-prone and time-consuming. Syntax or semantic issues often show up late in the build process, slowing developers down and making debugging harder. It is often a struggle to enforce systematically additional policies, whether company or project-specific.
+QNX buildfiles play a central role in many embedded and automotive systems. As systems scale, buildfiles naturally increase in complexity, which makes early validation, consistency, and policy enforcement increasingly important.
 
-`qnx-buildfile-lang` project solves this by providing:
+`qnx-buildfile-lang` project provides:
 
 * A complete Xtext grammar for QNX buildfiles, ensuring instant syntax validation, syntax highlighting and code completion inside Eclipse
 * A reference executable jar for generic validation of buildfiles. Maven library that enables programmatic parsing, additinal opportunities for semantic validation, automation, and CI checks.
@@ -38,7 +44,7 @@ This project was built to make QNX development smoother, more reliable, and more
 
 === Key Features
 
-`qnx-buildfile-lang` is a set of java-based tooling implemented using link:https://eclipse.dev/Xtext/[Xtext] for parsing link:https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.building/topic/buildfiles/buildfile.html[QNX Buildfiles] 
+`qnx-buildfile-lang` is a set of java-based tooling implemented using link:https://eclipse.dev/Xtext/[Xtext] for parsing link:https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.building/topic/buildfiles/buildfile_syntax.html[QNX Buildfiles] 
 
 * Available as an Eclipse Plugin
 ** Syntax highlighting
@@ -187,7 +193,7 @@ When the AST is known, will be easy to access any part of the model and to valid
 
 There are multiple ways to see and remember the AST.
 
-* If you are familiar with the Xtext grammar notation, you can see understand the AST simply link:https://github.com/gvergine/qnx-buildfile-lang/blob/master/qnx.buildfile.lang.parent/qnx.buildfile.lang/src/qnx/buildfile/lang/BuildfileDSL.xtext[looking at it]. 
+* If you are familiar with the Xtext grammar notation, you can see understand the AST by link:https://github.com/gvergine/qnx-buildfile-lang/blob/master/qnx.buildfile.lang.parent/qnx.buildfile.lang/src/qnx/buildfile/lang/BuildfileDSL.xtext[looking at it]. 
 * Javadoc is generated and available via Maven as well
 * Referring to the following class diagram:
 
