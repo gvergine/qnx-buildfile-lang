@@ -53,6 +53,7 @@
 		<module>qnx.buildfile.lang</module>
 		<module>qnx.buildfile.lang.cli</module>
 		<module>qnx.buildfile.lang.ide</module>
+		<module>qnx.buildfile.lang.lsp</module>
 		<module>qnx.buildfile.lang.ui</module>
 		<module>qnx.buildfile.lang.target</module>
 		<module>qnx.buildfile.lang.feature</module>

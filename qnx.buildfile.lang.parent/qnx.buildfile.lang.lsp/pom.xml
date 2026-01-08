@@ -1,0 +1,242 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<name>QNX Buildfile LSP</name>
+	<description>Eclipse plugin for qnx.buildfile.lang</description>
+	<url>https://github.com/gvergine/qnx-buildfile-lang</url>
+
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>https://www.apache.org/licenses/LICENSE-2.0</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<scm>
+		<connection>https://github.com/gvergine/qnx-buildfile-lang.git</connection>
+		<developerConnection>https://github.com/gvergine/qnx-buildfile-lang.git</developerConnection>
+		<url>https://github.com/gvergine/qnx-buildfile-lang</url>
+	</scm>
+
+	<developers>
+		<developer>
+			<id>gvergine</id>
+			<name>Giovanni Vergine</name>
+			<email>verginegiovanni@gmail.com</email>
+			<url>https://gvergine.github.io</url>
+		</developer>
+	</developers>
+
+	<parent>
+		<groupId>io.github.gvergine</groupId>
+		<artifactId>qnx.buildfile.lang.parent</artifactId>
+		<version>1.0.6</version>
+	</parent>
+	<artifactId>qnx.buildfile.lang.lsp</artifactId>
+	<packaging>jar</packaging>
+
+	<properties>
+		<vscode.dir>${project.build.directory}/vscode</vscode.dir>
+		<vsix.name>qnx-buildfile-lsp-${project.version}.vsix</vsix.name>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>io.github.gvergine</groupId>
+			<artifactId>qnx.buildfile.lang.ide</artifactId>
+			<version>1.0.6</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.xtext</groupId>
+			<artifactId>org.eclipse.xtext.ide</artifactId>
+			<version>${xtextVersion}</version>
+		</dependency>
+
+
+	</dependencies>
+
+	<build>
+		<plugins>
+
+			<!-- Build fat/executable jar -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>3.5.0</version>
+
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+
+						<configuration>
+
+							<filters>
+								<filter>
+									<artifact>*:*</artifact>
+									<excludes>
+										<exclude>META-INF/*.SF</exclude>
+										<exclude>META-INF/*.DSA</exclude>
+										<exclude>META-INF/*.RSA</exclude>
+									</excludes>
+								</filter>
+							</filters>
+
+							<transformers>
+								<transformer
+									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+									<mainClass>
+										org.eclipse.xtext.ide.server.ServerLauncher</mainClass>
+									<manifestEntries>
+										<Implementation-Version>
+											${project.version}</Implementation-Version>
+									</manifestEntries>
+								</transformer>
+							</transformers>
+
+							<shadedArtifactAttached>true</shadedArtifactAttached>
+							<shadedClassifierName>shaded</shadedClassifierName>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.3.1</version>
+				<executions>
+					<execution>
+						<id>prepare-vscode-extension</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${vscode.dir}</outputDirectory>
+							<resources>
+
+								<!-- VS Code extension files -->
+								<resource>
+									<directory>src/main/vscode</directory>
+								</resource>
+
+								<!-- Shaded JAR -->
+								<resource>
+									<directory>${project.build.directory}</directory>
+									<includes>
+										<include>
+									qnx.buildfile.lang.lsp-${project.version}-shaded.jar</include>
+									</includes>
+									<targetPath>
+									server</targetPath>> </resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>3.1.0</version>
+				<executions>
+					<!-- Run npm install -->
+					<execution>
+						<id>npm-install</id>
+						<phase>package</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<configuration>
+							<executable>npm</executable>
+							<workingDirectory>${vscode.dir}</workingDirectory>
+							<arguments>
+								<argument>install</argument>
+								<argument>--production</argument>
+							</arguments>
+						</configuration>
+					</execution>
+
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>3.6.0</version>
+				<executions>
+					<execution>
+						<id>build-vsix</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<attach>false</attach>
+							<descriptors>
+								<descriptor>src/main/assembly/vsix.xml</descriptor>
+							</descriptors>
+							<finalName>${vsix.name}</finalName>
+							<appendAssemblyId>false</appendAssemblyId>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>3.1.0</version>
+				<executions>
+					<execution>
+						<id>rename-vsix</id>
+						<phase>package</phase>
+						<configuration>
+							<target>
+								<move
+									file="${project.build.directory}/${vsix.name}.zip"
+									tofile="${project.build.directory}/${vsix.name}" />
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>3.5.0</version>
+				<executions>
+					<execution>
+						<id>attach-vsix</id>
+						<phase>package</phase>
+						<goals>
+							<goal>attach-artifact</goal>
+						</goals>
+						<configuration>
+							<artifacts>
+								<artifact>
+									<file>
+										${project.build.directory}/${vsix.name}</file>
+									<type>vsix</type>
+								</artifact>
+							</artifacts>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+
+		</plugins>
+	</build>
+
+</project>

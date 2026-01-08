@@ -1,0 +1,28 @@
+{
+  "name": "qnx-buildfile-lang",
+  "displayName": "QNX Buildfile Language Support",
+  "description": "Language Server support for QNX buildfiles",
+  "version": "1.0.6",
+  "publisher": "gvergine",
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": ["Programming Languages"],
+  "activationEvents": [
+    "onLanguage:qnx-buildfile-lang"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "qnx-buildfile-lang",
+        "aliases": ["QNX Buildfile"],
+        "extensions": [".build"],
+        "configuration": "./language-configuration.json"
+      }
+    ]
+  },
+  "dependencies": {
+    "vscode-languageclient": "^9.0.1"
+  }
+}
