@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<name>QNX Buildfile IDE</name>
@@ -7,9 +8,9 @@
 
 	<licenses>
 		<license>
-		<name>Apache License, Version 2.0</name>
-		<url>https://www.apache.org/licenses/LICENSE-2.0</url>
-		<distribution>repo</distribution>
+			<name>Apache License, Version 2.0</name>
+			<url>https://www.apache.org/licenses/LICENSE-2.0</url>
+			<distribution>repo</distribution>
 		</license>
 	</licenses>
 
@@ -21,15 +22,15 @@
 
 	<developers>
 		<developer>
-		<id>gvergine</id>
-		<name>Giovanni Vergine</name>
-		<email>verginegiovanni@gmail.com</email>
-		<url>https://gvergine.github.io</url>
+			<id>gvergine</id>
+			<name>Giovanni Vergine</name>
+			<email>verginegiovanni@gmail.com</email>
+			<url>https://gvergine.github.io</url>
 		</developer>
 	</developers>
 
 	<parent>
-	    <groupId>io.github.gvergine</groupId>
+		<groupId>io.github.gvergine</groupId>
 		<artifactId>qnx.buildfile.lang.parent</artifactId>
 		<version>1.0.6</version>
 	</parent>
@@ -37,6 +38,12 @@
 	<packaging>eclipse-plugin</packaging>
 
 	<build>
+		<resources>
+			<resource>
+				<directory>resources</directory>
+			</resource>
+		</resources>
+
 		<plugins>
 			<plugin>
 				<groupId>org.eclipse.xtend</groupId>
