@@ -1,4 +1,4 @@
-RELEASE_VERSION="1.0.6"
+RELEASE_VERSION="1.0.7"
 DOC_DATE=$(shell date)
 
 default: index.html qnx-buildfile-lang-documentation.pdf

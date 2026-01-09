@@ -114,7 +114,7 @@ Xtext supports the Language Server protocol out of the box, that works very well
 === Installation
 
 Download the extension as a `.vsix` from Maven Central.
-Look for `qnx.buildfile.lang.lsp-{version}.vsix in link:https://central.sonatype.com/artifact/io.github.gvergine/qnx.buildfile.lang.lsp[Maven Central]
+Look for `qnx.buildfile.lang.lsp-{version}.vsix` in link:https://central.sonatype.com/artifact/io.github.gvergine/qnx.buildfile.lang.lsp[Maven Central]
 
 E.g. latest version `{release_version}` can be found at link:https://repo1.maven.org/maven2/io/github/gvergine/qnx.buildfile.lang.lsp/{release_version}/[]
 

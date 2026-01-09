@@ -4,7 +4,7 @@ const { LanguageClient } = require('vscode-languageclient/node')
 
 function activate(context) {
   const jarPath = context.asAbsolutePath(
-    path.join('server', 'qnx.buildfile.lang.lsp-1.0.6-shaded.jar')
+    path.join('server', 'qnx.buildfile.lang.lsp-1.0.7-shaded.jar')
   )
 
   const client = new LanguageClient(

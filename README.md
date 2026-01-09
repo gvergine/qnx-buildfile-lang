@@ -18,10 +18,10 @@ The rest of this README is for developers who want to contribute to the grammar.
 ## Compile from command line
 
 ```
-mvn clean install
+mvn clean package
 ```
 
-## Release
+## Release (only for mantainers)
 
 ```
 mvn -P release clean deploy -DskipPublishing=true
