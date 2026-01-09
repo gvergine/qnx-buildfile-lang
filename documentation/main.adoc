@@ -46,7 +46,7 @@ This project was built to make QNX development smoother, more reliable, and more
 
 `qnx-buildfile-lang` is a set of java-based tooling implemented using link:https://eclipse.dev/Xtext/[Xtext] for parsing link:https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.building/topic/buildfiles/buildfile_syntax.html[QNX Buildfiles] 
 
-* Available as an Eclipse Plugin
+* Available as an Eclipse Plugin or Visual Studio Code extension
 ** Syntax highlighting
 ** Real-time syntax validation
 ** Better readability and safer editing
@@ -104,6 +104,36 @@ When opening a QNX .build file for the first time in an Eclipse project, Eclipse
 Syntax checking and highlighting should be available as in the following picture:
 
 image::images/qnx-buildfile-eclipse-plugin.png[]
+
+<<<
+
+== The Visual Studio Code extension
+
+Xtext supports the Language Server protocol out of the box, that works very well with Visual Studio Code.
+
+=== Installation
+
+Download the extension as a `.vsix` from Maven Central.
+Look for `qnx.buildfile.lang.lsp-{version}.vsix in link:https://central.sonatype.com/artifact/io.github.gvergine/qnx.buildfile.lang.lsp[Maven Central]
+
+E.g. latest version `{release_version}` can be found at link:https://repo1.maven.org/maven2/io/github/gvergine/qnx.buildfile.lang.lsp/{release_version}/[]
+
+Once downloded, follow these steps for installing in vscode:
+
+```shell
+(optional) $ code --uninstall-extension gvergine.qnx-buildfile-lang
+$ code --install-extension path/to/qnx.buildfile.lang.lsp-{version}.vsix
+```
+
+Then, restart vscode.
+
+
+=== Usage
+
+
+Syntax checking and highlighting should be available as in the following picture:
+
+image::images/qnx-buildfile-vscode-plugin.png[]
 
 <<<
 
