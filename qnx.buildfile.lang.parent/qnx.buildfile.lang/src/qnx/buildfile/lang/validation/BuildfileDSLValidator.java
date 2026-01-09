@@ -3,11 +3,14 @@
  */
 package qnx.buildfile.lang.validation;
 
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.xtext.validation.Check;
 
 import qnx.buildfile.lang.attributes.AttributeKeywords;
 import qnx.buildfile.lang.buildfileDSL.Attribute;
+import qnx.buildfile.lang.buildfileDSL.BooleanAttribute;
 import qnx.buildfile.lang.buildfileDSL.BuildfileDSLPackage;
+import qnx.buildfile.lang.buildfileDSL.ValuedAttribute;
 
 /**
  * This class contains custom validation rules. 
@@ -15,18 +18,40 @@ import qnx.buildfile.lang.buildfileDSL.BuildfileDSLPackage;
  * See https://www.eclipse.org/Xtext/documentation/303_runtime_concepts.html#validation
  */
 public class BuildfileDSLValidator extends AbstractBuildfileDSLValidator {
-	
+
+	public void reportError(String message, EStructuralFeature feature, String code)
+	{
+		error(message, feature, code);
+	}
+
 	@Check
-	public void checkAttributes(Attribute attribute) {
-		if (!AttributeKeywords.ALL_ATTRIBUTE_KEYWORDS
-				.contains(attribute.getName()))
+	public void checkAttributes(BooleanAttribute booleanAttribute) {
+		if (!AttributeKeywords.ALL_BOOLEAN_ATTRIBUTE_KEYWORDS
+				.contains(booleanAttribute.getName()))
 		{
-			error("Attribute name \"" + attribute.getName() + "\" is not known",
+			error("Unknown BooleanAttribute \"" + booleanAttribute.getName(),
 					BuildfileDSLPackage.Literals.ATTRIBUTE__NAME,
 					"invalidName");
-
 		}
 
 	}
-	
+
+	@Check
+	public void checkAttributes(ValuedAttribute valuedAttribute) {
+		if (!AttributeKeywords.ALL_VALUED_ATTRIBUTE_KEYWORDS
+				.contains(valuedAttribute.getName()))
+		{
+			error("Unknown ValuedAttribute \"" + valuedAttribute.getName() + "\"",
+					BuildfileDSLPackage.Literals.ATTRIBUTE__NAME,
+					"invalidName");
+		}
+		else
+		{
+			AttributeValueChecker.check(valuedAttribute,this);
+		}
+
+	}
+
+
+
 }

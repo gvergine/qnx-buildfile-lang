@@ -10,6 +10,8 @@ public class AttributeKeywords
 	public final static List<String> MKIFS_ATTRIBUTE_KEYWORDS;
 	public final static List<String> MKQNX6FS_ATTRIBUTE_KEYWORDS;
 	public final static List<String> ALL_ATTRIBUTE_KEYWORDS;
+	public final static List<String> ALL_BOOLEAN_ATTRIBUTE_KEYWORDS;
+	public final static List<String> ALL_VALUED_ATTRIBUTE_KEYWORDS;
 
 	static
 	{
@@ -33,6 +35,20 @@ public class AttributeKeywords
 				Stream.concat(
 						MKIFS_ATTRIBUTE_KEYWORDS.stream(),
 						MKQNX6FS_ATTRIBUTE_KEYWORDS.stream())
+				).distinct().collect(Collectors.toUnmodifiableList());
+
+		ALL_BOOLEAN_ATTRIBUTE_KEYWORDS = Stream.concat(
+				Arrays.stream(MkifsBooleanAttributeKeyword.values()).map(Enum::name),
+				Arrays.stream(Mkqnx6fsBooleanAttributeKeyword.values()).map(Enum::name)
+				)
+				.distinct()
+				.collect(Collectors.toUnmodifiableList());
+
+		ALL_VALUED_ATTRIBUTE_KEYWORDS = Stream.concat(
+				Arrays.stream(UndocumentedValuedAttributeKeyword.values()).map(Enum::name),
+				Stream.concat(
+						Arrays.stream(MkifsValuedAttributeKeyword.values()).map(Enum::name),
+						Arrays.stream(Mkqnx6fsValuedAttributeKeyword.values()).map(Enum::name))
 				).distinct().collect(Collectors.toUnmodifiableList());
 
 	}
