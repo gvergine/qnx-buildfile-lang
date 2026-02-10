@@ -3,9 +3,19 @@
  */
 package qnx.buildfile.lang.ide;
 
+import qnx.buildfile.lang.validation.CustomValidatorJarPathProvider;
+import qnx.buildfile.lang.validation.SystemPropertyCustomValidatorJarPathProvider;
 
 /**
  * Use this class to register ide components.
  */
 public class BuildfileDSLIdeModule extends AbstractBuildfileDSLIdeModule {
+
+	/**
+	 * Bind the system-property-based provider so the LSP server picks up
+	 * {@code -DcustomValidatorJar=/path/to/jar} passed by the VSCode extension.
+	 */
+	public Class<? extends CustomValidatorJarPathProvider> bindCustomValidatorJarPathProvider() {
+		return SystemPropertyCustomValidatorJarPathProvider.class;
+	}
 }

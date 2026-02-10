@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+	<extension
+		point="org.eclipse.ui.editors">
+		<editor
+			class="qnx.buildfile.lang.ui.BuildfileDSLExecutableExtensionFactory:org.eclipse.xtext.ui.editor.XtextEditor"
+			contributorClass="org.eclipse.ui.editors.text.TextEditorActionContributor"
+			default="true"
+			extensions="build"
+			id="qnx.buildfile.lang.BuildfileDSL"
+			name="BuildfileDSL Editor">
+		</editor>
+	</extension>
+	<extension
+		point="org.eclipse.ui.handlers">
+		<handler
+			class="qnx.buildfile.lang.ui.BuildfileDSLExecutableExtensionFactory:org.eclipse.xtext.ui.editor.hyperlinking.OpenDeclarationHandler"
+			commandId="org.eclipse.xtext.ui.editor.hyperlinking.OpenDeclaration">
+			<activeWhen>
+				<reference
+					definitionId="qnx.buildfile.lang.BuildfileDSL.Editor.opened">
+				</reference>
+			</activeWhen>
+		</handler>
+		<handler
+			class="qnx.buildfile.lang.ui.BuildfileDSLExecutableExtensionFactory:org.eclipse.xtext.ui.editor.handler.ValidateActionHandler"
+			commandId="qnx.buildfile.lang.BuildfileDSL.validate">
+			<activeWhen>
+				<reference
+					definitionId="qnx.buildfile.lang.BuildfileDSL.Editor.opened">
+				</reference>
+			</activeWhen>
+		</handler>
+		<!-- copy qualified name -->
+		<handler
+			class="qnx.buildfile.lang.ui.BuildfileDSLExecutableExtensionFactory:org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedNameHandler"
+			commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedName">
+			<activeWhen>
+				<reference definitionId="qnx.buildfile.lang.BuildfileDSL.Editor.opened" />
+			</activeWhen>
+		</handler>
+		<handler
+			class="qnx.buildfile.lang.ui.BuildfileDSLExecutableExtensionFactory:org.eclipse.xtext.ui.editor.copyqualifiedname.OutlineCopyQualifiedNameHandler"
+			commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.OutlineCopyQualifiedName">
+			<activeWhen>
+				<and>
+					<reference definitionId="qnx.buildfile.lang.BuildfileDSL.XtextEditor.opened" />
+					<iterate>
+						<adapt type="org.eclipse.xtext.ui.editor.outline.IOutlineNode" />
+					</iterate>
+				</and>
+			</activeWhen>
+		</handler>
+	</extension>
+	<extension point="org.eclipse.core.expressions.definitions">
+		<definition id="qnx.buildfile.lang.BuildfileDSL.Editor.opened">
+			<and>
+				<reference definitionId="isActiveEditorAnInstanceOfXtextEditor"/>
+				<with variable="activeEditor">
+					<test property="org.eclipse.xtext.ui.editor.XtextEditor.languageName"
+						value="qnx.buildfile.lang.BuildfileDSL"
+						forcePluginActivation="true"/>
+				</with>
+			</and>
+		</definition>
+		<definition id="qnx.buildfile.lang.BuildfileDSL.XtextEditor.opened">
+			<and>
+				<reference definitionId="isXtextEditorActive"/>
+				<with variable="activeEditor">
+					<test property="org.eclipse.xtext.ui.editor.XtextEditor.languageName"
+						value="qnx.buildfile.lang.BuildfileDSL"
+						forcePluginActivation="true"/>
+				</with>
+			</and>
+		</definition>
+	</extension>
+	<extension
+			point="org.eclipse.ui.preferencePages">
+		<page
+			class="qnx.buildfile.lang.ui.BuildfileDSLExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
+			id="qnx.buildfile.lang.BuildfileDSL"
+			name="BuildfileDSL">
+			<keywordReference id="qnx.buildfile.lang.ui.keyword_BuildfileDSL"/>
+		</page>
+		<page
+			category="qnx.buildfile.lang.BuildfileDSL"
+			class="qnx.buildfile.lang.ui.BuildfileDSLExecutableExtensionFactory:org.eclipse.xtext.ui.editor.syntaxcoloring.SyntaxColoringPreferencePage"
+			id="qnx.buildfile.lang.BuildfileDSL.coloring"
+			name="Syntax Coloring">
+			<keywordReference id="qnx.buildfile.lang.ui.keyword_BuildfileDSL"/>
+		</page>
+		<page
+			category="qnx.buildfile.lang.BuildfileDSL"
+			class="qnx.buildfile.lang.ui.BuildfileDSLExecutableExtensionFactory:org.eclipse.xtext.ui.editor.templates.XtextTemplatePreferencePage"
+			id="qnx.buildfile.lang.BuildfileDSL.templates"
+			name="Templates">
+			<keywordReference id="qnx.buildfile.lang.ui.keyword_BuildfileDSL"/>
+		</page>
+	</extension>
+	<extension
+			point="org.eclipse.ui.propertyPages">
+		<page
+			class="qnx.buildfile.lang.ui.BuildfileDSLExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
+			id="qnx.buildfile.lang.BuildfileDSL"
+			name="BuildfileDSL">
+			<keywordReference id="qnx.buildfile.lang.ui.keyword_BuildfileDSL"/>
+			<enabledWhen>
+				<adapt type="org.eclipse.core.resources.IProject"/>
+			</enabledWhen>
+			<filter name="projectNature" value="org.eclipse.xtext.ui.shared.xtextNature"/>
+		</page>
+	</extension>
+	<extension
+		point="org.eclipse.ui.keywords">
+		<keyword
+			id="qnx.buildfile.lang.ui.keyword_BuildfileDSL"
+			label="BuildfileDSL"/>
+	</extension>
+	<extension
+		point="org.eclipse.ui.commands">
+		<command
+			description="Trigger expensive validation"
+			id="qnx.buildfile.lang.BuildfileDSL.validate"
+			name="Validate">
+		</command>
+		<!-- copy qualified name -->
+		<command
+			id="org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedName"
+			categoryId="org.eclipse.ui.category.edit"
+			description="Copy the qualified name for the selected element"
+			name="Copy Qualified Name">
+		</command>
+		<command
+			id="org.eclipse.xtext.ui.editor.copyqualifiedname.OutlineCopyQualifiedName"
+			categoryId="org.eclipse.ui.category.edit"
+			description="Copy the qualified name for the selected element"
+			name="Copy Qualified Name">
+		</command>
+	</extension>
+	<extension point="org.eclipse.ui.menus">
+		<menuContribution
+			locationURI="popup:#TextEditorContext?after=group.edit">
+			<command
+				commandId="qnx.buildfile.lang.BuildfileDSL.validate"
+				style="push"
+				tooltip="Trigger expensive validation">
+				<visibleWhen checkEnabled="false">
+					<reference
+						definitionId="qnx.buildfile.lang.BuildfileDSL.Editor.opened">
+					</reference>
+				</visibleWhen>
+			</command>
+		</menuContribution>
+		<!-- copy qualified name -->
+		<menuContribution locationURI="popup:#TextEditorContext?after=copy">
+			<command commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedName"
+				style="push" tooltip="Copy Qualified Name">
+				<visibleWhen checkEnabled="false">
+					<reference definitionId="qnx.buildfile.lang.BuildfileDSL.Editor.opened" />
+				</visibleWhen>
+			</command>
+		</menuContribution>
+		<menuContribution locationURI="menu:edit?after=copy">
+			<command commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedName"
+				style="push" tooltip="Copy Qualified Name">
+				<visibleWhen checkEnabled="false">
+					<reference definitionId="qnx.buildfile.lang.BuildfileDSL.Editor.opened" />
+				</visibleWhen>
+			</command>
+		</menuContribution>
+		<menuContribution locationURI="popup:org.eclipse.xtext.ui.outline?after=additions">
+			<command commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.OutlineCopyQualifiedName"
+				style="push" tooltip="Copy Qualified Name">
+				<visibleWhen checkEnabled="false">
+					<and>
+						<reference definitionId="qnx.buildfile.lang.BuildfileDSL.XtextEditor.opened" />
+						<iterate>
+							<adapt type="org.eclipse.xtext.ui.editor.outline.IOutlineNode" />
+						</iterate>
+					</and>
+				</visibleWhen>
+			</command>
+		</menuContribution>
+	</extension>
+	<extension point="org.eclipse.ui.menus">
+		<menuContribution locationURI="popup:#TextEditorContext?endof=group.find">
+			<command commandId="org.eclipse.xtext.ui.editor.FindReferences">
+				<visibleWhen checkEnabled="false">
+					<reference definitionId="qnx.buildfile.lang.BuildfileDSL.Editor.opened">
+					</reference>
+				</visibleWhen>
+			</command>
+		</menuContribution>
+	</extension>
+	<extension point="org.eclipse.ui.handlers">
+		<handler
+			class="qnx.buildfile.lang.ui.BuildfileDSLExecutableExtensionFactory:org.eclipse.xtext.ui.editor.findrefs.FindReferencesHandler"
+			commandId="org.eclipse.xtext.ui.editor.FindReferences">
+			<activeWhen>
+				<reference
+					definitionId="qnx.buildfile.lang.BuildfileDSL.Editor.opened">
+				</reference>
+			</activeWhen>
+		</handler>
+	</extension>
+	<extension point="org.eclipse.core.contenttype.contentTypes">
+		<content-type
+			base-type="org.eclipse.core.runtime.text"
+			file-extensions="build"
+			id="qnx.buildfile.lang.BuildfileDSL.contenttype"
+			name="BuildfileDSL File"
+			priority="normal">
+		</content-type>
+	</extension>
+	<!-- adding resource factories -->
+	<extension
+		point="org.eclipse.emf.ecore.extension_parser">
+		<parser
+			class="qnx.buildfile.lang.ui.BuildfileDSLExecutableExtensionFactory:org.eclipse.xtext.resource.IResourceFactory"
+			type="build">
+		</parser>
+	</extension>
+	<extension point="org.eclipse.xtext.extension_resourceServiceProvider">
+		<resourceServiceProvider
+			class="qnx.buildfile.lang.ui.BuildfileDSLExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
+			uriExtension="build">
+		</resourceServiceProvider>
+	</extension>
+	<!-- marker definitions for qnx.buildfile.lang.BuildfileDSL -->
+	<extension
+			id="buildfiledsl.check.fast"
+			name="BuildfileDSL Problem"
+			point="org.eclipse.core.resources.markers">
+		<super type="org.eclipse.xtext.ui.check.fast"/>
+		<persistent value="true"/>
+	</extension>
+	<extension
+			id="buildfiledsl.check.normal"
+			name="BuildfileDSL Problem"
+			point="org.eclipse.core.resources.markers">
+		<super type="org.eclipse.xtext.ui.check.normal"/>
+		<persistent value="true"/>
+	</extension>
+	<extension
+			id="buildfiledsl.check.expensive"
+			name="BuildfileDSL Problem"
+			point="org.eclipse.core.resources.markers">
+		<super type="org.eclipse.xtext.ui.check.expensive"/>
+		<persistent value="true"/>
+	</extension>
+	<extension point="org.eclipse.ui.preferencePages">
+		<page
+			category="qnx.buildfile.lang.BuildfileDSL"
+			class="qnx.buildfile.lang.ui.BuildfileDSLExecutableExtensionFactory:org.eclipse.xtext.ui.validation.ValidatorPreferencePage"
+			id="qnx.buildfile.lang.BuildfileDSL.validator.preferencePage"
+			name="Errors/Warnings">
+			<keywordReference id="qnx.buildfile.lang.ui.keyword_BuildfileDSL"/>
+		</page>
+	</extension>
+	<extension point="org.eclipse.xtext.builder.participant">
+		<participant
+			class="qnx.buildfile.lang.ui.BuildfileDSLExecutableExtensionFactory:org.eclipse.xtext.builder.IXtextBuilderParticipant"
+			fileExtensions="build"/>
+	</extension>
+	<extension point="org.eclipse.ui.preferencePages">
+		<page
+			category="qnx.buildfile.lang.BuildfileDSL"
+			class="qnx.buildfile.lang.ui.BuildfileDSLExecutableExtensionFactory:org.eclipse.xtext.builder.preferences.BuilderPreferencePage"
+			id="qnx.buildfile.lang.BuildfileDSL.compiler.preferencePage"
+			name="Compiler">
+			<keywordReference id="qnx.buildfile.lang.ui.keyword_BuildfileDSL"/>
+		</page>
+	</extension>
+	<extension point="org.eclipse.ui.propertyPages">
+		<page
+			category="qnx.buildfile.lang.BuildfileDSL"
+			class="qnx.buildfile.lang.ui.BuildfileDSLExecutableExtensionFactory:org.eclipse.xtext.builder.preferences.BuilderPreferencePage"
+			id="qnx.buildfile.lang.BuildfileDSL.compiler.propertyPage"
+			name="Compiler">
+			<keywordReference id="qnx.buildfile.lang.ui.keyword_BuildfileDSL"/>
+			<enabledWhen>
+				<adapt type="org.eclipse.core.resources.IProject"/>
+			</enabledWhen>
+			<filter name="projectNature" value="org.eclipse.xtext.ui.shared.xtextNature"/>
+		</page>
+	</extension>
+	<extension point="org.eclipse.ui.menus">
+		<menuContribution locationURI="popup:#TextEditorContext?after=xtext.ui.openDeclaration">
+			<command
+				commandId="org.eclipse.xtext.ui.OpenGeneratedFileCommand"
+				id="qnx.buildfile.lang.BuildfileDSL.OpenGeneratedCode"
+				style="push">
+				<visibleWhen checkEnabled="false">
+					<reference definitionId="qnx.buildfile.lang.BuildfileDSL.Editor.opened" />
+				</visibleWhen>
+			</command>
+		</menuContribution>
+	</extension>
+	<extension point="org.eclipse.ui.handlers">
+		<handler
+			class="qnx.buildfile.lang.ui.BuildfileDSLExecutableExtensionFactory:org.eclipse.xtext.ui.generator.trace.OpenGeneratedFileHandler"
+			commandId="org.eclipse.xtext.ui.OpenGeneratedFileCommand">
+			<activeWhen>
+				<reference definitionId="qnx.buildfile.lang.BuildfileDSL.Editor.opened" />
+			</activeWhen>
+		</handler>
+	</extension>
+	<!-- Quick Outline -->
+	<extension
+		point="org.eclipse.ui.handlers">
+		<handler
+			class="qnx.buildfile.lang.ui.BuildfileDSLExecutableExtensionFactory:org.eclipse.xtext.ui.editor.outline.quickoutline.ShowQuickOutlineActionHandler"
+			commandId="org.eclipse.xtext.ui.editor.outline.QuickOutline">
+			<activeWhen>
+				<reference
+					definitionId="qnx.buildfile.lang.BuildfileDSL.Editor.opened">
+				</reference>
+			</activeWhen>
+		</handler>
+	</extension>
+	<extension
+		point="org.eclipse.ui.commands">
+		<command
+			description="Open the quick outline."
+			id="org.eclipse.xtext.ui.editor.outline.QuickOutline"
+			name="Quick Outline">
+		</command>
+	</extension>
+	<extension point="org.eclipse.ui.menus">
+		<menuContribution
+			locationURI="popup:#TextEditorContext?after=group.open">
+			<command commandId="org.eclipse.xtext.ui.editor.outline.QuickOutline"
+				style="push"
+				tooltip="Open Quick Outline">
+				<visibleWhen checkEnabled="false">
+					<reference definitionId="qnx.buildfile.lang.BuildfileDSL.Editor.opened"/>
+				</visibleWhen>
+			</command>
+		</menuContribution>
+	</extension>
+	<!-- quickfix marker resolution generator for qnx.buildfile.lang.BuildfileDSL -->
+	<extension
+			point="org.eclipse.ui.ide.markerResolution">
+		<markerResolutionGenerator
+			class="qnx.buildfile.lang.ui.BuildfileDSLExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
+			markerType="qnx.buildfile.lang.ui.buildfiledsl.check.fast">
+			<attribute
+				name="FIXABLE_KEY"
+				value="true">
+			</attribute>
+		</markerResolutionGenerator>
+		<markerResolutionGenerator
+			class="qnx.buildfile.lang.ui.BuildfileDSLExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
+			markerType="qnx.buildfile.lang.ui.buildfiledsl.check.normal">
+			<attribute
+				name="FIXABLE_KEY"
+				value="true">
+			</attribute>
+		</markerResolutionGenerator>
+		<markerResolutionGenerator
+			class="qnx.buildfile.lang.ui.BuildfileDSLExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
+			markerType="qnx.buildfile.lang.ui.buildfiledsl.check.expensive">
+			<attribute
+				name="FIXABLE_KEY"
+				value="true">
+			</attribute>
+		</markerResolutionGenerator>
+	</extension>
+	<!-- Rename Refactoring -->
+	<extension point="org.eclipse.ui.handlers">
+		<handler
+			class="qnx.buildfile.lang.ui.BuildfileDSLExecutableExtensionFactory:org.eclipse.xtext.ui.refactoring.ui.DefaultRenameElementHandler"
+			commandId="org.eclipse.xtext.ui.refactoring.RenameElement">
+			<activeWhen>
+				<reference
+					definitionId="qnx.buildfile.lang.BuildfileDSL.Editor.opened">
+				</reference>
+			</activeWhen>
+		</handler>
+	</extension>
+	<extension point="org.eclipse.ui.menus">
+		<menuContribution
+			locationURI="popup:#TextEditorContext?after=group.edit">
+			<command commandId="org.eclipse.xtext.ui.refactoring.RenameElement"
+				style="push">
+				<visibleWhen checkEnabled="false">
+					<reference
+						definitionId="qnx.buildfile.lang.BuildfileDSL.Editor.opened">
+					</reference>
+				</visibleWhen>
+			</command>
+		</menuContribution>
+	</extension>
+	<extension point="org.eclipse.ui.preferencePages">
+		<page
+			category="qnx.buildfile.lang.BuildfileDSL"
+			class="qnx.buildfile.lang.ui.BuildfileDSLExecutableExtensionFactory:org.eclipse.xtext.ui.refactoring.ui.RefactoringPreferencePage"
+			id="qnx.buildfile.lang.BuildfileDSL.refactoring"
+			name="Refactoring">
+			<keywordReference id="qnx.buildfile.lang.ui.keyword_BuildfileDSL"/>
+		</page>
+	</extension>
+	<extension point="org.eclipse.compare.contentViewers">
+		<viewer id="qnx.buildfile.lang.BuildfileDSL.compare.contentViewers"
+			class="qnx.buildfile.lang.ui.BuildfileDSLExecutableExtensionFactory:org.eclipse.xtext.ui.compare.InjectableViewerCreator"
+			extensions="build">
+		</viewer>
+		<contentTypeBinding
+			contentTypeId="qnx.buildfile.lang.BuildfileDSL.contenttype"
+			contentViewerId="qnx.buildfile.lang.BuildfileDSL.compare.contentViewers" />
+	</extension>
+	<extension point="org.eclipse.compare.contentMergeViewers">
+		<viewer id="qnx.buildfile.lang.BuildfileDSL.compare.contentMergeViewers"
+			class="qnx.buildfile.lang.ui.BuildfileDSLExecutableExtensionFactory:org.eclipse.xtext.ui.compare.InjectableViewerCreator"
+			extensions="build" label="BuildfileDSL Compare">
+		</viewer>
+		<contentTypeBinding
+			contentTypeId="qnx.buildfile.lang.BuildfileDSL.contenttype"
+			contentMergeViewerId="qnx.buildfile.lang.BuildfileDSL.compare.contentMergeViewers" />
+	</extension>
+	<extension point="org.eclipse.ui.editors.documentProviders">
+		<provider id="qnx.buildfile.lang.BuildfileDSL.editors.documentProviders"
+			class="qnx.buildfile.lang.ui.BuildfileDSLExecutableExtensionFactory:org.eclipse.xtext.ui.editor.model.XtextDocumentProvider"
+			extensions="build">
+		</provider>
+	</extension>
+	<extension point="org.eclipse.team.core.fileTypes">
+		<fileTypes
+			extension="build"
+			type="text">
+		</fileTypes>
+	</extension>
+</plugin>

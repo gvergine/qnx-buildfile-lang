@@ -20,6 +20,22 @@
         "extensions": [".build"],
         "configuration": "./language-configuration.json"
       }
+    ],
+    "configuration": {
+      "title": "QNX Buildfile Language",
+      "properties": {
+        "qnx-buildfile-lang.customValidatorJarPath": {
+          "type": "string",
+          "default": "",
+          "description": "Absolute path to a custom validator JAR. The JAR must contain a Main-Class manifest entry pointing to a class that extends BaseDSLValidator. Leave empty for default validation only."
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "qnx-buildfile-lang.restartServer",
+        "title": "QNX Buildfile: Restart Language Server"
+      }
     ]
   },
   "dependencies": {
