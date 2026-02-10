@@ -12,9 +12,9 @@ import qnx.buildfile.lang.buildfileDSL.DeploymentStatement;
 import qnx.buildfile.lang.buildfileDSL.Model;
 import qnx.buildfile.lang.utils.Walker;
 import qnx.buildfile.lang.utils.Walker.IWalker;
-import qnx.buildfile.lang.validation.BuildfileDSLValidator;
+import qnx.buildfile.lang.validation.BaseDSLValidator;
 
-public class CustomValidator  extends BuildfileDSLValidator
+public class CustomValidator  extends BaseDSLValidator
 {
 	private final static Walker walker = new Walker();
 

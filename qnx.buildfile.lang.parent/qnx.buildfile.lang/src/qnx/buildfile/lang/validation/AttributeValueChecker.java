@@ -25,7 +25,7 @@ public class AttributeValueChecker {
 		}
 	}
 
-	public static void check(ValuedAttribute valuedAttribute, BuildfileDSLValidator buildfileDSLValidator)
+	public static void check(ValuedAttribute valuedAttribute, BaseDSLValidator buildfileDSLValidator)
 	{
 		final String name = valuedAttribute.getName();
 		if (name == null) return;
@@ -70,7 +70,7 @@ public class AttributeValueChecker {
 	}
 
 	/* Checks */
-	public static void check_uid(ValuedAttribute valuedAttribute, BuildfileDSLValidator buildfileDSLValidator)
+	public static void check_uid(ValuedAttribute valuedAttribute, BaseDSLValidator buildfileDSLValidator)
 	{
 		if (!isValidUidOrGid(valuedAttribute.getValue()))
 		{
@@ -80,7 +80,7 @@ public class AttributeValueChecker {
 		}	
 	}
 
-	public static void check_gid(ValuedAttribute valuedAttribute, BuildfileDSLValidator buildfileDSLValidator)
+	public static void check_gid(ValuedAttribute valuedAttribute, BaseDSLValidator buildfileDSLValidator)
 	{
 		if (!isValidUidOrGid(valuedAttribute.getValue()))
 		{
@@ -91,7 +91,7 @@ public class AttributeValueChecker {
 	}
 
 	private final static List<String> AUTOSO_VALUES = Arrays.asList("n","none","l","list","a","add");
-	public static void check_autoso(ValuedAttribute valuedAttribute, BuildfileDSLValidator buildfileDSLValidator)
+	public static void check_autoso(ValuedAttribute valuedAttribute, BaseDSLValidator buildfileDSLValidator)
 	{
 		if (!AUTOSO_VALUES.contains(valuedAttribute.getValue()))
 		{
@@ -102,7 +102,7 @@ public class AttributeValueChecker {
 	}
 
 	private final static List<String> COMPRESS_VALUES = Arrays.asList("1","2","3");
-	public static void check_compress(ValuedAttribute valuedAttribute, BuildfileDSLValidator buildfileDSLValidator)
+	public static void check_compress(ValuedAttribute valuedAttribute, BaseDSLValidator buildfileDSLValidator)
 	{
 		if (!COMPRESS_VALUES.contains(valuedAttribute.getValue()))
 		{
@@ -113,7 +113,7 @@ public class AttributeValueChecker {
 	}
 
 	private final static List<String> TYPE_VALUES = Arrays.asList("link","fifo","file","dir");
-	public static void check_type(ValuedAttribute valuedAttribute, BuildfileDSLValidator buildfileDSLValidator)
+	public static void check_type(ValuedAttribute valuedAttribute, BaseDSLValidator buildfileDSLValidator)
 	{
 		if (!TYPE_VALUES.contains(valuedAttribute.getValue()))
 		{
