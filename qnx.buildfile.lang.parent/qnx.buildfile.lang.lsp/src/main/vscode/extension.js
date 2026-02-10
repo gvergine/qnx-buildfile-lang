@@ -2,7 +2,7 @@ const path = require('path')
 const vscode = require('vscode')
 const { LanguageClient } = require('vscode-languageclient/node')
 
-const SERVER_JAR = 'qnx.buildfile.lang.lsp-1.0.7-shaded.jar'
+const SERVER_JAR = 'qnx.buildfile.lang.lsp-1.0.8-shaded.jar'
 const CONFIG_SECTION = 'qnx-buildfile-lang'
 const CONFIG_KEY = 'customValidatorJarPath'
 

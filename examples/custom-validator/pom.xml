@@ -16,7 +16,7 @@
 		<dependency>
 			<groupId>io.github.gvergine</groupId>
 			<artifactId>qnx.buildfile.lang</artifactId>
-			<version>1.0.7</version>
+			<version>1.0.8</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.xtext</groupId>
