@@ -25,12 +25,24 @@ public class JarLoader {
     /**
      * Simple holder for cached JAR state.
      */
-    private record CacheEntry(
-        long lastModifiedTime,
-        Object instance,
-        Exception error,
-        URLClassLoader classLoader
-    ) {}
+    private static final class CacheEntry {
+        private final long lastModifiedTime;
+        private final Object instance;
+        private final Exception error;
+        private final URLClassLoader classLoader;
+
+        CacheEntry(long lastModifiedTime, Object instance, Exception error, URLClassLoader classLoader) {
+            this.lastModifiedTime = lastModifiedTime;
+            this.instance = instance;
+            this.error = error;
+            this.classLoader = classLoader;
+        }
+
+        long lastModifiedTime() { return lastModifiedTime; }
+        Object instance() { return instance; }
+        Exception error() { return error; }
+        URLClassLoader classLoader() { return classLoader; }
+    }
 
     public JarLoader(Class<?> parentLoaderClass) {
         this.parentLoaderClass = parentLoaderClass;
@@ -144,3 +156,4 @@ public class JarLoader {
         }
     }
 }
+
