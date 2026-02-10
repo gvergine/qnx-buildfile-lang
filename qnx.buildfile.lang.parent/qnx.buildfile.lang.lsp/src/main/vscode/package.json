@@ -21,6 +21,13 @@
         "configuration": "./language-configuration.json"
       }
     ],
+    "grammars": [
+      {
+        "language": "qnx-buildfile-lang",
+        "scopeName": "source.qnx-buildfile",
+        "path": "./syntaxes/qnx-buildfile.tmLanguage.json"
+      }
+    ],
     "configuration": {
       "title": "QNX Buildfile Language",
       "properties": {

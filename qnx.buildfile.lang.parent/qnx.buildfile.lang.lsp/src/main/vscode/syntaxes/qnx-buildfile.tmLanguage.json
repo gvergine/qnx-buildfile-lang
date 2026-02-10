@@ -1,0 +1,82 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "QNX Buildfile",
+  "scopeName": "source.qnx-buildfile",
+  "patterns": [
+    { "include": "#comment" },
+    { "include": "#attribute-section" },
+    { "include": "#inline-block" },
+    { "include": "#variable-ref" },
+    { "include": "#deployment-line" }
+  ],
+  "repository": {
+    "comment": {
+      "name": "comment.line.number-sign.qnx-buildfile",
+      "match": "#.*$"
+    },
+    "variable-ref": {
+      "name": "variable.other.qnx-buildfile",
+      "match": "\\$\\{[^}]*\\}"
+    },
+    "string-quoted": {
+      "name": "string.quoted.double.qnx-buildfile",
+      "begin": "\"",
+      "end": "\"",
+      "patterns": [
+        { "include": "#variable-ref" }
+      ]
+    },
+    "attribute-section": {
+      "name": "meta.attribute-section.qnx-buildfile",
+      "begin": "\\[",
+      "end": "\\]",
+      "beginCaptures": {
+        "0": { "name": "punctuation.section.brackets.begin.qnx-buildfile" }
+      },
+      "endCaptures": {
+        "0": { "name": "punctuation.section.brackets.end.qnx-buildfile" }
+      },
+      "patterns": [
+        { "include": "#variable-ref" },
+        { "include": "#string-quoted" },
+        {
+          "comment": "Boolean attribute: +name or -name",
+          "match": "([+-])([^\\]\\s=]+)",
+          "captures": {
+            "1": { "name": "keyword.operator.boolean-modifier.qnx-buildfile" },
+            "2": { "name": "entity.name.tag.attribute.qnx-buildfile" }
+          }
+        },
+        {
+          "comment": "Valued attribute: name=value",
+          "match": "([^\\]\\s=]+)(=)([^\\]\\s]*)",
+          "captures": {
+            "1": { "name": "entity.name.tag.attribute.qnx-buildfile" },
+            "2": { "name": "keyword.operator.assignment.qnx-buildfile" },
+            "3": { "name": "constant.numeric.attribute-value.qnx-buildfile" }
+          }
+        }
+      ]
+    },
+    "inline-block": {
+      "name": "string.unquoted.block.qnx-buildfile",
+      "begin": "\\{\\s*$",
+      "end": "^\\s*\\}",
+      "beginCaptures": {
+        "0": { "name": "punctuation.section.block.begin.qnx-buildfile" }
+      },
+      "endCaptures": {
+        "0": { "name": "punctuation.section.block.end.qnx-buildfile" }
+      }
+    },
+    "deployment-line": {
+      "comment": "Deployment: path = source (outside of brackets)",
+      "match": "(?<=\\])\\s*([^={}#\\n]+?)(=)([^{}#\\n]+)",
+      "captures": {
+        "1": { "name": "string.unquoted.path.target.qnx-buildfile" },
+        "2": { "name": "keyword.operator.assignment.qnx-buildfile" },
+        "3": { "name": "string.unquoted.path.source.qnx-buildfile" }
+      }
+    }
+  }
+}

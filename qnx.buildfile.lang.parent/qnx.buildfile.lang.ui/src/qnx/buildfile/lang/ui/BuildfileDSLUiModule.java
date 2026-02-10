@@ -4,7 +4,10 @@
 package qnx.buildfile.lang.ui;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.xtext.ide.editor.syntaxcoloring.ISemanticHighlightingCalculator;
+import org.eclipse.xtext.ui.editor.syntaxcoloring.IHighlightingConfiguration;
 
+import qnx.buildfile.lang.ide.BuildfileDSLSemanticHighlightingCalculator;
 import qnx.buildfile.lang.validation.CustomValidatorJarPathProvider;
 
 /**
@@ -22,5 +25,19 @@ public class BuildfileDSLUiModule extends AbstractBuildfileDSLUiModule {
 	 */
 	public Class<? extends CustomValidatorJarPathProvider> bindCustomValidatorJarPathProvider() {
 		return EclipseCustomValidatorJarPathProvider.class;
+	}
+
+	/**
+	 * Define the color styles for syntax highlighting in Eclipse.
+	 */
+	public Class<? extends IHighlightingConfiguration> bindIHighlightingConfiguration() {
+		return BuildfileDSLHighlightingConfiguration.class;
+	}
+
+	/**
+	 * Bind the semantic highlighting calculator (shared with LSP via the IDE project).
+	 */
+	public Class<? extends ISemanticHighlightingCalculator> bindISemanticHighlightingCalculator() {
+		return BuildfileDSLSemanticHighlightingCalculator.class;
 	}
 }

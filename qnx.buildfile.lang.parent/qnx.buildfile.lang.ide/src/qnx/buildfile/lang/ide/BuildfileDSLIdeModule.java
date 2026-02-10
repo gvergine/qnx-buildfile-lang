@@ -3,6 +3,7 @@
  */
 package qnx.buildfile.lang.ide;
 
+import org.eclipse.xtext.ide.editor.syntaxcoloring.ISemanticHighlightingCalculator;
 
 /**
  * Use this class to register ide components.
@@ -12,4 +13,8 @@ package qnx.buildfile.lang.ide;
  * bound via {@code @ImplementedBy} — no explicit binding needed here.
  */
 public class BuildfileDSLIdeModule extends AbstractBuildfileDSLIdeModule {
+
+	public Class<? extends ISemanticHighlightingCalculator> bindISemanticHighlightingCalculator() {
+		return BuildfileDSLSemanticHighlightingCalculator.class;
+	}
 }
