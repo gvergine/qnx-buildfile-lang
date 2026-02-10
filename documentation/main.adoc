@@ -30,34 +30,78 @@ endif::[]
 
 <<<
 
-== qnx-buildfile-lang
+== Overview
 
 QNX buildfiles play a central role in many embedded and automotive systems. As systems scale, buildfiles naturally increase in complexity, which makes early validation, consistency, and policy enforcement increasingly important.
 
-`qnx-buildfile-lang` project provides:
-
-* A complete Xtext grammar for QNX buildfiles, ensuring instant syntax validation, syntax highlighting and code completion inside Eclipse
-* A reference executable jar for generic validation of buildfiles. Maven library that enables programmatic parsing, additinal opportunities for semantic validation, automation, and CI checks.
-* A standalone Maven library that can be used to write your own java-based tooling, enabling programmatic parsing, additional semantic validation, automation, and CI checks.
+`qnx-buildfile-lang` is a set of Java-based tooling implemented using link:https://eclipse.dev/Xtext/[Xtext] for parsing link:https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.building/topic/buildfiles/buildfile_syntax.html[QNX Buildfiles].
 
 This project was built to make QNX development smoother, more reliable, and more automatable for teams working on embedded or automotive platforms.
 
-=== Key Features
+=== Feature Matrix
 
-`qnx-buildfile-lang` is a set of java-based tooling implemented using link:https://eclipse.dev/Xtext/[Xtext] for parsing link:https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.building/topic/buildfiles/buildfile_syntax.html[QNX Buildfiles] 
+[cols="<3,^1,^1,^1,^1", options="header"]
+|===
+| Feature
+| Eclipse Plugin
+| VSCode Extension
+| CLI
+| Java Library
 
-* Available as an Eclipse Plugin or Visual Studio Code extension
-** Syntax highlighting
-** Real-time syntax validation
-** Better readability and safer editing
+| Syntax validation
+| yes
+| yes
+| yes
+| yes
 
-* Available as command line standalone executable jar
-** Enables parsing of buildfiles programmatically
-** Useful for addding validation to CI/CD pipelines
+| Syntax highlighting
+| yes
+| yes
+|
+|
 
-* Available as a standalone Java library
-** Integrate into custom tooling
-** Distributed via Maven Central
+| Content assist / auto-completion
+| yes
+| yes
+|
+|
+
+| Outline view
+| yes
+|
+|
+|
+
+| Custom validator JAR
+| yes
+| yes
+| yes
+| yes
+
+| Variable expansion
+|
+|
+|
+| yes
+
+| Quick fixes
+| yes
+| yes
+|
+|
+
+| Find references / rename
+| yes
+| yes
+|
+|
+
+| AST walk / code generation
+|
+|
+|
+| yes
+|===
 
 === Project Status & Compatibility
 
@@ -71,7 +115,7 @@ This project was built to make QNX development smoother, more reliable, and more
 
 <<<
 
-== The Eclipse plugin
+== Eclipse Plugin
 
 Like most of the Xtext-based projects, an Eclipse Feature is available and is deployed to Maven. Follow the steps below to understand how to get it, install it and use it.
 
@@ -105,9 +149,29 @@ Syntax checking and highlighting should be available as in the following picture
 
 image::images/qnx-buildfile-eclipse-plugin.png[]
 
+=== Syntax Highlighting
+
+The Eclipse plugin provides semantic syntax highlighting with configurable colors. Highlighting styles can be customized under _Preferences → BuildfileDSL → Syntax Coloring_.
+
+=== Custom Validator
+
+The Eclipse plugin supports loading an external custom validator JAR at runtime. This allows teams to enforce additional project-specific rules without modifying the plugin itself.
+
+To configure it:
+
+* Go to _Preferences → BuildfileDSL → Custom Validator_
+* Browse and select the custom validator JAR file
+* Run _Project → Clean_ to re-trigger validation with the custom rules
+
+The JAR must contain a `Main-Class` manifest entry pointing to a class that extends `BaseDSLValidator`.
+
+Clearing the path and cleaning the project restores default validation.
+
+An example maven project that builds a custom validator is available link:https://github.com/gvergine/qnx-buildfile-lang/tree/master/examples/custom-validator[here].
+
 <<<
 
-== The Visual Studio Code extension
+== Visual Studio Code Extension
 
 Xtext supports the Language Server protocol out of the box, that works very well with Visual Studio Code.
 
@@ -127,29 +191,46 @@ $ code --install-extension path/to/qnx.buildfile.lang.lsp-{version}.vsix
 
 Then, restart vscode.
 
-
 === Usage
-
 
 Syntax checking and highlighting should be available as in the following picture:
 
 image::images/qnx-buildfile-vscode-plugin.png[]
 
+=== Syntax Highlighting
+
+The VSCode extension provides syntax highlighting via a TextMate grammar combined with LSP semantic tokens. Colors follow the active VSCode theme.
+
+=== Custom Validator
+
+The VSCode extension supports loading an external custom validator JAR at runtime.
+
+To configure it:
+
+* Open VSCode Settings (Ctrl+,)
+* Search for `qnx-buildfile-lang`
+* Set _Custom Validator Jar Path_ to the absolute path of the JAR file
+
+The language server restarts automatically when the setting is changed. A manual restart is also available via the Command Palette (Ctrl+Shift+P → _QNX Buildfile: Restart Language Server_).
+
+Clearing the path triggers an automatic restart and restores default validation.
+
+An example maven project that builds a custom validator is available link:https://github.com/gvergine/qnx-buildfile-lang/tree/master/examples/custom-validator[here].
+
 <<<
 
-== The command line standalone executable jar
+== Command Line Interface
 
 A ready-to-use executable jar for command line validation is available as well. This is mostly useful for integration in a script or in a CI/CD pipeline.
 
 It supports the same validation rules of the Eclipse Plugin, but they are printed on the standard error, and the exit code will be 0 only if no errors are found.
 
-
 === Installation
+
 Download the command line standalone executable jar from Maven Central.
 Look for `qnx.buildfile.lang.cli-{Version}-shaded.jar` in link:https://central.sonatype.com/artifact/io.github.gvergine/qnx.buildfile.lang.cli[Maven Central]
 
 E.g. latest version `{release_version}` can be found at link:https://repo1.maven.org/maven2/io/github/gvergine/qnx.buildfile.lang.cli/{release_version}/[]
-
 
 === Usage
 
@@ -181,7 +262,6 @@ $ echo $?
 0
 ----
 
-
 Errors and warnings will be reported on standard error, and exit code will be 1 if any error occourred:
 
 [source,shell,subs="attributes,verbatim"]
@@ -195,14 +275,28 @@ $ echo $?
 1
 ----
 
+=== Custom Validator
+
+The CLI supports loading a custom validator JAR via the `-c` flag:
+
+[source,shell,subs="attributes,verbatim"]
+----
+$ java -jar qnx.buildfile.lang.cli-{release_version}-shaded.jar -c path/to/custom-validator.jar -i path/to/file.build
+----
+
+The JAR must contain a `Main-Class` manifest entry pointing to a class that extends `BaseDSLValidator`.
+
+An example maven project that builds a custom validator is available link:https://github.com/gvergine/qnx-buildfile-lang/tree/master/examples/custom-validator[here].
+
 <<<
 
-== Getting Started with the standalone Java library
+== Java Library
 
-The standalone Java library allows you to build your own java-based tooling. Typical use cases are:
-- extending the validation rules for enforcing additional policies
-- integrate with java-based environments (e.g. Tomcat, Java-based GUIs)
-- generation (e.g. xml or csv representation of the buildfile for further processing with non-java tools)
+The standalone Java library allows you to build your own Java-based tooling. Typical use cases are:
+
+* Extending the validation rules for enforcing additional policies
+* Integration with Java-based environments (e.g. Tomcat, Java-based GUIs)
+* Code generation (e.g. XML or CSV representation of the buildfile for further processing with non-Java tools)
 
 === Installation
 
@@ -216,22 +310,20 @@ You can get the latest version via Maven Central:
 </dependency>
 ----
 
-=== Key concepts to remember
+=== Key Concepts
 
 When using a parser library, it is important first to understand the Abstract Syntax Tree that the parser will produce in memory.
-When the AST is known, will be easy to access any part of the model and to validate it or generate output accordingly.
+When the AST is known, it will be easy to access any part of the model and to validate it or generate output accordingly.
 
-There are multiple ways to see and remember the AST.
+There are multiple ways to see and remember the AST:
 
-* If you are familiar with the Xtext grammar notation, you can see understand the AST by link:https://github.com/gvergine/qnx-buildfile-lang/blob/master/qnx.buildfile.lang.parent/qnx.buildfile.lang/src/qnx/buildfile/lang/BuildfileDSL.xtext[looking at it]. 
-* Javadoc is generated and available via Maven as well
+* If you are familiar with the Xtext grammar notation, you can understand the AST by link:https://github.com/gvergine/qnx-buildfile-lang/blob/master/qnx.buildfile.lang.parent/qnx.buildfile.lang/src/qnx/buildfile/lang/BuildfileDSL.xtext[looking at it].
+* Javadoc is generated and available via Maven as well.
 * Referring to the following class diagram:
 
 image::images/buildfileDSL_class_diagram.png[]
 
-=== Examples
-
-==== Parsing programmatically:
+=== Parsing Programmatically
 
 [source,java]
 ----
@@ -246,10 +338,12 @@ ParsingResult parseResult = parser.parse(file);
 
 if (parseResult.hasErrors()) {
     // ...
-
+}
 ----
 
-==== Writing and using a custom validator:
+=== Custom Validator
+
+You can write a custom validator by extending `BaseDSLValidator` and annotating check methods with `@Check`:
 
 [source,java]
 ----
@@ -257,9 +351,9 @@ import org.eclipse.xtext.validation.Check;
 import qnx.buildfile.lang.attributes.AttributeKeywords;
 import qnx.buildfile.lang.buildfileDSL.Attribute;
 import qnx.buildfile.lang.buildfileDSL.BuildfileDSLPackage;
-import qnx.buildfile.lang.validation.BuildfileDSLValidator;
+import qnx.buildfile.lang.validation.BaseDSLValidator;
 
-public class CustomBuildfileDSLValidator extends BuildfileDSLValidator
+public class CustomValidator extends BaseDSLValidator
 {
 	@Check
 	public void checkAttributes(Attribute attribute)
@@ -291,9 +385,9 @@ import qnx.buildfile.lang.buildfileDSL.DeploymentStatement;
 import qnx.buildfile.lang.buildfileDSL.Model;
 import qnx.buildfile.lang.utils.Walker;
 import qnx.buildfile.lang.utils.Walker.IWalker;
-import qnx.buildfile.lang.validation.BuildfileDSLValidator;
+import qnx.buildfile.lang.validation.BaseDSLValidator;
 
-public class CustomBuildfileDSLValidator extends BuildfileDSLValidator {
+public class CustomValidator extends BaseDSLValidator {
 
 	private final static Walker walker = new Walker();
 
@@ -336,24 +430,20 @@ public class CustomBuildfileDSLValidator extends BuildfileDSLValidator {
 }
 ----
 
+The custom validator JAR must include a `META-INF/MANIFEST.MF` with a `Main-Class` entry pointing to your validator class. It can then be used across all deployment modes: the Eclipse plugin (via preferences), the VSCode extension (via settings), and the CLI (via the `-c` flag).
+
+To use the custom validator programmatically with the Java library, set the system property before creating the parser:
 
 [source,java]
 ----
-import qnx.buildfile.lang.utils.Parser;
-import qnx.buildfile.lang.utils.ParsingResult;
-
+System.setProperty("customValidatorJar", "/path/to/custom-validator.jar");
+Parser parser = new Parser();
 // ...
-
-Parser parser = new Parser(CustomBuildfileDSLValidator.class);
-File file = new File(filename);
-ParsingResult parseResult = parser.parse(file);
-
-if (parseResult.hasErrors()) {
-    // ...
-
 ----
 
-==== Resolve the environment variables:
+=== Variable Expansion
+
+The library provides a `VariableSubstitutor` utility for resolving `${...}` variable references in the parsed model:
 
 [source,java]
 ----
@@ -364,3 +454,40 @@ final Map<String, String> envMap = System.getenv();
 VariableSubstitutor vs = new VariableSubstitutor();
 vs.substituteVariables(model, envMap);
 ----
+
+=== AST Walking
+
+The `Walker` utility provides a visitor-style API for traversing the parsed model. Implement only the `found()` methods you need:
+
+[source,java]
+----
+import qnx.buildfile.lang.utils.Walker;
+import qnx.buildfile.lang.utils.Walker.IWalker;
+
+// ...
+Walker walker = new Walker();
+walker.walk(model, new IWalker() {
+    @Override
+    public void found(DeploymentStatement deploymentStatement) {
+        System.out.println("Found deployment: " + deploymentStatement.getPath());
+    }
+});
+----
+
+<<<
+
+== Changelog
+
+=== 1.0.8
+
+==== Custom Validator JAR Support
+
+* *Eclipse*: new preference page under _Preferences → BuildfileDSL → Custom Validator_ to configure the path to an external validator JAR. Changes take effect on _Project → Clean_.
+* *VSCode*: new setting `qnx-buildfile-lang.customValidatorJarPath` in VSCode Settings. The language server restarts automatically when the setting changes. A manual _QNX Buildfile: Restart Language Server_ command is also available in the Command Palette.
+* *CLI*: refactored to use the same validation pipeline as Eclipse and VSCode. The `-c` flag continues to work as before.
+
+==== Syntax Highlighting
+
+* *VSCode*: added TextMate grammar for syntax highlighting — comments, attribute sections, paths, variable references, content blocks, and operators are now colored.
+* *Eclipse*: added semantic highlighting with configurable colors. Styles can be customized under _Preferences → BuildfileDSL → Syntax Coloring_.
+* Both editors now show consistent highlighting across the same language elements.

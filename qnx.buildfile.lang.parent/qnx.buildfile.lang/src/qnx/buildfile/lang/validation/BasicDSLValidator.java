@@ -1,6 +1,7 @@
 package qnx.buildfile.lang.validation;
 
 import org.eclipse.xtext.validation.Check;
+import org.eclipse.xtext.validation.EValidatorRegistrar;
 
 import qnx.buildfile.lang.attributes.AttributeKeywords;
 import qnx.buildfile.lang.buildfileDSL.BooleanAttribute;
@@ -10,6 +11,13 @@ import qnx.buildfile.lang.buildfileDSL.ValuedAttribute;
 
 public class BasicDSLValidator extends BaseDSLValidator
 {
+	
+	@Override
+	public void register(EValidatorRegistrar registrar) {
+		// Prevent duplicate registration — this validator is invoked
+		// via @ComposedChecks on BuildfileDSLValidator, not directly.
+	}
+	
 	@Check
 	public void checkAttributes(BooleanAttribute booleanAttribute) {
 		if (!AttributeKeywords.ALL_BOOLEAN_ATTRIBUTE_KEYWORDS
