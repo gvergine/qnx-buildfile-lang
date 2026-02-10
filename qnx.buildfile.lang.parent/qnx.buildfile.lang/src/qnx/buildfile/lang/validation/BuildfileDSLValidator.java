@@ -62,8 +62,6 @@ public class BuildfileDSLValidator extends BaseDSLValidator
             
             extendedValidatorLoaded = true;
             loadedJarPath = jarPath;
-            System.out.println("Successfully loaded ExtendedValidator with " 
-                + extendedValidatorCheckMethods.size() + " check methods");
             
         } catch (ClassNotFoundException e) {
             System.err.println("ExtendedValidator class not found in JAR: " + e.getMessage());
