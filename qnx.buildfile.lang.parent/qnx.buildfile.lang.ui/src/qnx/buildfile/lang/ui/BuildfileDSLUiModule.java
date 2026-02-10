@@ -5,6 +5,8 @@ package qnx.buildfile.lang.ui;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
+import qnx.buildfile.lang.validation.CustomValidatorJarPathProvider;
+
 /**
  * Use this class to register components to be used within the Eclipse IDE.
  */
@@ -12,5 +14,13 @@ public class BuildfileDSLUiModule extends AbstractBuildfileDSLUiModule {
 
 	public BuildfileDSLUiModule(AbstractUIPlugin plugin) {
 		super(plugin);
+	}
+
+	/**
+	 * Bind the Eclipse-specific implementation that reads the JAR path
+	 * from the Eclipse preference store.
+	 */
+	public Class<? extends CustomValidatorJarPathProvider> bindCustomValidatorJarPathProvider() {
+		return EclipseCustomValidatorJarPathProvider.class;
 	}
 }

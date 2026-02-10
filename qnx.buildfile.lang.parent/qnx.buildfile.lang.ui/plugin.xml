@@ -257,6 +257,13 @@
 			name="Errors/Warnings">
 			<keywordReference id="qnx.buildfile.lang.ui.keyword_BuildfileDSL"/>
 		</page>
+		<page
+			category="qnx.buildfile.lang.BuildfileDSL"
+			class="qnx.buildfile.lang.ui.BuildfileDSLExecutableExtensionFactory:qnx.buildfile.lang.ui.CustomValidatorPreferencePage"
+			id="qnx.buildfile.lang.BuildfileDSL.customValidator.preferencePage"
+			name="Custom Validator">
+			<keywordReference id="qnx.buildfile.lang.ui.keyword_BuildfileDSL"/>
+		</page>
 	</extension>
 	<extension point="org.eclipse.xtext.builder.participant">
 		<participant

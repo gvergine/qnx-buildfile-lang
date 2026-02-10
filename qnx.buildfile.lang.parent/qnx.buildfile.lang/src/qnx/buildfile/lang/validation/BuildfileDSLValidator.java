@@ -12,22 +12,42 @@ import org.eclipse.xtext.validation.Check;
 import org.eclipse.xtext.validation.ComposedChecks;
 import org.eclipse.xtext.validation.ValidationMessageAcceptor;
 
+import com.google.inject.Inject;
+
 import qnx.buildfile.lang.buildfileDSL.Model;
 
 @ComposedChecks(validators = {BasicDSLValidator.class})
 public class BuildfileDSLValidator extends BaseDSLValidator
 {
+    @Inject
+    private CustomValidatorJarPathProvider jarPathProvider;
+
     private Object extendedValidator;
     private List<Method> extendedValidatorCheckMethods;
     private boolean extendedValidatorLoaded = false;
+    /** Track which path was loaded so we reload if the preference changes */
+    private String loadedJarPath = null;
     
     @Check
     public void loadExtendedValidator(Model model) {
-        System.err.println("extendedValidatorLoadAttemped");
+        String jarPath = (jarPathProvider != null) ? jarPathProvider.getJarPath() : null;
 
+        // If the path changed (or was cleared), reset state
+        if (!isEqualPath(jarPath, loadedJarPath)) {
+            extendedValidator = null;
+            extendedValidatorCheckMethods = null;
+            extendedValidatorLoaded = false;
+            loadedJarPath = null;
+        }
+
+        // Nothing configured
+        if (jarPath == null || jarPath.isBlank()) {
+            return;
+        }
+
+        // We call loadValidatorFromJar each time because JarLoader checks the timestamp
         try {
-            // Load the ExtendedValidator class
-        	extendedValidator = loadValidatorFromJar(new File("/home/giovanni/git/qnx-buildfile-lang/examples/custom-validator/target/custom-validator-0.0.1-SNAPSHOT.jar"));
+            extendedValidator = loadValidatorFromJar(new File(jarPath));
             
             // Find all @Check annotated methods
             extendedValidatorCheckMethods = new ArrayList<>();
@@ -41,6 +61,7 @@ public class BuildfileDSLValidator extends BaseDSLValidator
             initializeExtendedValidator();
             
             extendedValidatorLoaded = true;
+            loadedJarPath = jarPath;
             System.out.println("Successfully loaded ExtendedValidator with " 
                 + extendedValidatorCheckMethods.size() + " check methods");
             
@@ -52,6 +73,12 @@ public class BuildfileDSLValidator extends BaseDSLValidator
         }
     }
     
+    private static boolean isEqualPath(String a, String b) {
+        if (a == null && b == null) return true;
+        if (a == null || b == null) return false;
+        return a.equals(b);
+    }
+
     /**
      * Initialize the extended validator with necessary Xtext infrastructure
      */
@@ -59,23 +86,19 @@ public class BuildfileDSLValidator extends BaseDSLValidator
         if (extendedValidator instanceof AbstractDeclarativeValidator) {
             AbstractDeclarativeValidator validator = (AbstractDeclarativeValidator) extendedValidator;
             
-            // Use reflection to access and set the messageAcceptor field
             try {
                 Field messageAcceptorField = AbstractDeclarativeValidator.class.getDeclaredField("messageAcceptor");
                 messageAcceptorField.setAccessible(true);
                 
-                // Get our own messageAcceptor
                 Field ourMessageAcceptorField = AbstractDeclarativeValidator.class.getDeclaredField("messageAcceptor");
                 ourMessageAcceptorField.setAccessible(true);
                 ValidationMessageAcceptor ourMessageAcceptor = (ValidationMessageAcceptor) ourMessageAcceptorField.get(this);
                 
-                // Set it on the runtime validator
                 messageAcceptorField.set(validator, ourMessageAcceptor);
             } catch (NoSuchFieldException e) {
                 System.err.println("Could not access messageAcceptor field: " + e.getMessage());
             }
             
-            // Also try to share the chain if available
             try {
                 Field chainField = AbstractDeclarativeValidator.class.getDeclaredField("chain");
                 chainField.setAccessible(true);
@@ -91,14 +114,6 @@ public class BuildfileDSLValidator extends BaseDSLValidator
         }
     }
     
-//    @Override
-//    public void register(EValidatorRegistrar registrar) {
-//        // Prevent duplicate registration
-//    }
-    
-    /**
-     * Alternative approach: directly invoke checks during validation
-     */
     @Check
     public void delegateToExtendedValidator(EObject object) {
         if (extendedValidatorLoaded && extendedValidator != null) {
@@ -106,22 +121,16 @@ public class BuildfileDSLValidator extends BaseDSLValidator
         }
     }
     
-    /**
-     * Invoke all @Check methods from the runtime-loaded validator
-     */
     private void invokeExtendedValidatorChecks(EObject object) {
         for (Method method : extendedValidatorCheckMethods) {
             try {
                 Class<?>[] paramTypes = method.getParameterTypes();
                 
-                // Check if this method applies to the current object type
                 if (paramTypes.length == 1 && paramTypes[0].isInstance(object)) {
-                    // Set the context before invoking
                     setValidatorContext(extendedValidator);
                     method.invoke(extendedValidator, object);
                 }
             } catch (java.lang.reflect.InvocationTargetException e) {
-                // Unwrap and log the actual exception from the validator
                 Throwable cause = e.getCause();
                 System.err.println("Error in ExtendedValidator check method " 
                     + method.getName() + ": " + cause.getMessage());
@@ -134,18 +143,13 @@ public class BuildfileDSLValidator extends BaseDSLValidator
         }
     }
     
-    /**
-     * Set the validation context on the runtime validator so it can report errors
-     */
     private void setValidatorContext(Object validator) {
         if (validator instanceof AbstractDeclarativeValidator) {
             try {
-                // Access the setMessageAcceptor method if available
                 Method setMessageAcceptorMethod = AbstractDeclarativeValidator.class
                     .getDeclaredMethod("setMessageAcceptor", ValidationMessageAcceptor.class);
                 setMessageAcceptorMethod.setAccessible(true);
                 
-                // Get our message acceptor via reflection
                 Field ourMessageAcceptorField = AbstractDeclarativeValidator.class
                     .getDeclaredField("messageAcceptor");
                 ourMessageAcceptorField.setAccessible(true);
@@ -154,7 +158,6 @@ public class BuildfileDSLValidator extends BaseDSLValidator
                 
                 setMessageAcceptorMethod.invoke(validator, ourMessageAcceptor);
             } catch (Exception e) {
-                // If we can't set the context, the validator won't be able to report errors
                 System.err.println("Warning: Could not set validation context: " + e.getMessage());
             }
         }
