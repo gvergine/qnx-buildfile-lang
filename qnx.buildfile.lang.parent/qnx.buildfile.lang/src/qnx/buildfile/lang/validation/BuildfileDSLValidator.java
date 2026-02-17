@@ -16,7 +16,7 @@ import com.google.inject.Inject;
 
 import qnx.buildfile.lang.buildfileDSL.Model;
 
-@ComposedChecks(validators = {BasicDSLValidator.class})
+@ComposedChecks(validators = {BasicDSLValidator.class, DuplicatePathValidator.class})
 public class BuildfileDSLValidator extends BaseDSLValidator
 {
     @Inject

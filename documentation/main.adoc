@@ -49,58 +49,46 @@ This project was built to make QNX development smoother, more reliable, and more
 | Java Library
 
 | Syntax validation
-| yes
-| yes
-| yes
-| yes
+| icon:check[]
+| icon:check[]
+| icon:check[]
+| icon:check[]
 
 | Syntax highlighting
-| yes
-| yes
+| icon:check[]
+| icon:check[]
 |
 |
 
 | Content assist / auto-completion
-| yes
-| yes
+| icon:check[]
+| icon:check[]
 |
 |
 
 | Outline view
-| yes
+| icon:check[]
 |
 |
 |
 
 | Custom validator JAR
-| yes
-| yes
-| yes
-| yes
+| icon:check[]
+| icon:check[]
+| icon:check[]
+| icon:check[]
 
 | Variable expansion
 |
 |
 |
-| yes
+| icon:check[]
 
 | Quick fixes
-| yes
-| yes
+| icon:check[]
+| 
 |
 |
-
-| Find references / rename
-| yes
-| yes
-|
-|
-
-| AST walk / code generation
-|
-|
-|
-| yes
 |===
 
 === Project Status & Compatibility

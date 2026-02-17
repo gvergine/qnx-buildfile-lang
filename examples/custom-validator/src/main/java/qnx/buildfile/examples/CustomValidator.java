@@ -1,56 +1,41 @@
 package qnx.buildfile.examples;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.eclipse.xtext.validation.Check;
 
+import qnx.buildfile.lang.buildfileDSL.AttributeSection;
 import qnx.buildfile.lang.buildfileDSL.BuildfileDSLPackage;
 import qnx.buildfile.lang.buildfileDSL.DeploymentStatement;
-import qnx.buildfile.lang.buildfileDSL.Model;
-import qnx.buildfile.lang.utils.Walker;
-import qnx.buildfile.lang.utils.Walker.IWalker;
+import qnx.buildfile.lang.buildfileDSL.Path;
+import qnx.buildfile.lang.buildfileDSL.ValuedAttribute;
 import qnx.buildfile.lang.validation.BaseDSLValidator;
 
-public class CustomValidator  extends BaseDSLValidator
+public class CustomValidator extends BaseDSLValidator
 {
-	private final static Walker walker = new Walker();
-
+	/* This check raise a warning if a directory is copied from the host.
+	 * This is considered an antipattern in some environments.
+	 * 
+	 * To check this, it is necessarty to check type=dir, but that is not enough.
+	 * type=dir can be used also when creating an empty directory
+	 * We also need to check that there is no source path
+	 */
 	@Check
-	public void checkDuplicates(Model model) {
-		Map<String,List<DeploymentStatement>> duplicates = new HashMap<>();
+	public void checkDirectories(DeploymentStatement deploymentStatement)
+	{	
+		if (deploymentStatement == null) return;
+		if (deploymentStatement.getContent() == null || !(deploymentStatement.getContent() instanceof Path)) return;
 
-		walker.walk(model, new IWalker() {
-			@Override
-			public void found(DeploymentStatement deploymentStatement)
+		AttributeSection attributeSection = deploymentStatement.getAttributesection();
+		if (attributeSection == null) return;
+
+		attributeSection.getAttributes().forEach(attribute -> {
+			if (attribute instanceof ValuedAttribute valuedAttribute)
 			{
-				String path = deploymentStatement.getPath();
-
-				if (duplicates.containsKey(path))
+				if (valuedAttribute.getName().equals("type") && valuedAttribute.getValue().equals("dir"))
 				{
-					duplicates.get(path).add(deploymentStatement);
-				}
-				else
-				{
-					List<DeploymentStatement> l = new ArrayList<>();
-					l.add(deploymentStatement);
-					duplicates.put(path, l);
-				}
-
-			};
-		});
-
-		duplicates.forEach((path, deployments) ->{
-			if (deployments.size() > 1)
-			{
-				for (DeploymentStatement deployment : deployments)
-				{
-					warning("Duplicate path " + path, deployment,  BuildfileDSLPackage.Literals.DEPLOYMENT_STATEMENT__PATH, "duplicatePath");
+					warning("Copying whole directories from host is considered harmful",
+							deploymentStatement,  BuildfileDSLPackage.Literals.DEPLOYMENT_STATEMENT__PATH, "copiedPath");
 				}
 			}
-
 		});
 
 	}
