@@ -26,5 +26,6 @@ Export-Package: qnx.buildfile.lang,
  qnx.buildfile.lang.scoping,
  qnx.buildfile.lang.serializer,
  qnx.buildfile.lang.services,
+ qnx.buildfile.lang.utils,
  qnx.buildfile.lang.validation
 Import-Package: org.apache.log4j
