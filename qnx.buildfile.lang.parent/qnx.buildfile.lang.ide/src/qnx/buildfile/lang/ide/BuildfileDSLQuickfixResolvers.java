@@ -68,7 +68,6 @@ public final class BuildfileDSLQuickfixResolvers {
         if (firstQuote >= 0 && lastQuote > firstQuote) {
             return message.substring(firstQuote + 1, lastQuote);
         }
-        // Handle the case where the closing quote is missing (BooleanAttribute message)
         if (firstQuote >= 0 && lastQuote == firstQuote) {
             return message.substring(firstQuote + 1);
         }

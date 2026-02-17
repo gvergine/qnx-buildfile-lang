@@ -4,6 +4,7 @@
 package qnx.buildfile.lang.ide;
 
 import org.eclipse.xtext.ide.editor.syntaxcoloring.ISemanticHighlightingCalculator;
+import org.eclipse.xtext.ide.server.codeActions.ICodeActionService2;
 import org.eclipse.xtext.ide.server.symbol.DocumentSymbolMapper;
 import org.eclipse.xtext.resource.IDefaultResourceDescriptionStrategy;
 
@@ -26,5 +27,9 @@ public class BuildfileDSLIdeModule extends AbstractBuildfileDSLIdeModule {
 
 	public Class<? extends IDefaultResourceDescriptionStrategy> bindIDefaultResourceDescriptionStrategy() {
 		return BuildfileDSLResourceDescriptionStrategy.class;
+	}
+
+	public Class<? extends ICodeActionService2> bindICodeActionService2() {
+		return BuildfileDSLCodeActionService.class;
 	}
 }

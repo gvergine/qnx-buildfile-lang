@@ -22,7 +22,6 @@ class QuickfixResolversTest {
 
 	@Test
 	def void extractNameFromBooleanAttributeMessage() {
-		// BooleanAttribute message has no closing quote
 		val name = BuildfileDSLQuickfixResolvers.extractBadNameFromMessage(
 			'Unknown BooleanAttribute "optonal')
 		assertEquals("optonal", name)
@@ -101,7 +100,6 @@ class QuickfixResolversTest {
 
 	@Test
 	def void atMostThreeSuggestions() {
-		// "a" is very short and would match many keywords at distance <= 4
 		val suggestions = BuildfileDSLQuickfixResolvers.suggestAttributeNames("a")
 		assertTrue(suggestions.size <= 3, "Should return at most 3 suggestions")
 	}
