@@ -14,3 +14,4 @@ Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: qnx.buildfile.lang.ide,
  qnx.buildfile.lang.ide.contentassist.antlr,
  qnx.buildfile.lang.ide.contentassist.antlr.internal
+Import-Package: org.eclipse.lsp4j

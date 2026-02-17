@@ -3,39 +3,32 @@
  */
 package qnx.buildfile.lang.ui.quickfix;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-
 import org.eclipse.xtext.ui.editor.quickfix.DefaultQuickfixProvider;
 import org.eclipse.xtext.ui.editor.quickfix.Fix;
 import org.eclipse.xtext.ui.editor.quickfix.IssueResolutionAcceptor;
 import org.eclipse.xtext.validation.Issue;
 
-import qnx.buildfile.lang.attributes.AttributeKeywords;
+import qnx.buildfile.lang.ide.BuildfileDSLQuickfixResolvers;
 
 /**
- * Quick fixes for BuildfileDSL validation issues.
+ * Quick fixes for BuildfileDSL validation issues in Eclipse.
+ * <p>
+ * Delegates to {@link BuildfileDSLQuickfixResolvers} for the shared
+ * suggestion logic (Levenshtein distance matching).
  */
 public class BuildfileDSLQuickfixProvider extends DefaultQuickfixProvider {
 
-	/** Maximum Levenshtein distance to consider a suggestion relevant. */
-	private static final int MAX_DISTANCE = 4;
-
-	/** Maximum number of suggestions to offer. */
-	private static final int MAX_SUGGESTIONS = 3;
-
 	@Fix("invalidName")
 	public void fixInvalidAttributeName(final Issue issue, IssueResolutionAcceptor acceptor) {
-		String badName = extractBadName(issue);
+		String badName = BuildfileDSLQuickfixResolvers.extractBadNameFromMessage(issue.getMessage());
 		if (badName == null || badName.isEmpty()) {
 			return;
 		}
 
-		List<Suggestion> suggestions = findClosestMatches(badName, AttributeKeywords.ALL_ATTRIBUTE_KEYWORDS);
+		var suggestions = BuildfileDSLQuickfixResolvers.suggestAttributeNames(badName);
 
-		for (Suggestion suggestion : suggestions) {
-			final String replacement = suggestion.keyword;
+		for (var suggestion : suggestions) {
+			final String replacement = suggestion.getKeyword();
 			acceptor.accept(issue,
 					"Change to '" + replacement + "'",
 					"Replace unknown attribute '" + badName + "' with '" + replacement + "'",
@@ -46,85 +39,6 @@ public class BuildfileDSLQuickfixProvider extends DefaultQuickfixProvider {
 								issue.getLength(),
 								replacement);
 					});
-		}
-	}
-
-	/**
-	 * Extract the bad attribute name from the issue's data or message.
-	 * <p>
-	 * The issue offset/length points to the attribute name in the document,
-	 * but we can also extract it from the error message as a fallback.
-	 */
-	private String extractBadName(Issue issue) {
-		// Try to extract from the error message: Unknown BooleanAttribute "name" or Unknown ValuedAttribute "name"
-		String message = issue.getMessage();
-		if (message != null) {
-			int firstQuote = message.indexOf('"');
-			int lastQuote = message.lastIndexOf('"');
-			if (firstQuote >= 0 && lastQuote > firstQuote) {
-				return message.substring(firstQuote + 1, lastQuote);
-			}
-			// Handle the case where the closing quote is missing (BooleanAttribute message)
-			if (firstQuote >= 0 && lastQuote == firstQuote) {
-				return message.substring(firstQuote + 1);
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * Find the closest matching keywords by Levenshtein distance.
-	 */
-	private List<Suggestion> findClosestMatches(String badName, List<String> keywords) {
-		List<Suggestion> candidates = new ArrayList<>();
-		String lowerBadName = badName.toLowerCase();
-
-		for (String keyword : keywords) {
-			int distance = levenshteinDistance(lowerBadName, keyword.toLowerCase());
-			if (distance <= MAX_DISTANCE && distance > 0) {
-				candidates.add(new Suggestion(keyword, distance));
-			}
-		}
-
-		candidates.sort(Comparator.comparingInt(s -> s.distance));
-
-		if (candidates.size() > MAX_SUGGESTIONS) {
-			candidates = candidates.subList(0, MAX_SUGGESTIONS);
-		}
-
-		return candidates;
-	}
-
-	/**
-	 * Compute the Levenshtein distance between two strings.
-	 */
-	private static int levenshteinDistance(String a, String b) {
-		int lenA = a.length();
-		int lenB = b.length();
-		int[][] dp = new int[lenA + 1][lenB + 1];
-
-		for (int i = 0; i <= lenA; i++) dp[i][0] = i;
-		for (int j = 0; j <= lenB; j++) dp[0][j] = j;
-
-		for (int i = 1; i <= lenA; i++) {
-			for (int j = 1; j <= lenB; j++) {
-				int cost = (a.charAt(i - 1) == b.charAt(j - 1)) ? 0 : 1;
-				dp[i][j] = Math.min(
-						Math.min(dp[i - 1][j] + 1, dp[i][j - 1] + 1),
-						dp[i - 1][j - 1] + cost);
-			}
-		}
-
-		return dp[lenA][lenB];
-	}
-
-	private static class Suggestion {
-		final String keyword;
-		final int distance;
-
-		Suggestion(String keyword, int distance) {
-			this.keyword = keyword;
-			this.distance = distance;
 		}
 	}
 }
