@@ -8,6 +8,7 @@ Bundle-SymbolicName: qnx.buildfile.lang.tests; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: qnx.buildfile.lang,
  qnx.buildfile.lang.ide,
+ org.eclipse.xtext.ide,
  org.eclipse.xtext.testing,
  org.eclipse.xtext.xbase.testing,
  org.eclipse.xtext.xbase.lib;bundle-version="2.39.0"

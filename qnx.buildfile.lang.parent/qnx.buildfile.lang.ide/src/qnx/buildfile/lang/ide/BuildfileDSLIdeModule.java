@@ -4,6 +4,8 @@
 package qnx.buildfile.lang.ide;
 
 import org.eclipse.xtext.ide.editor.syntaxcoloring.ISemanticHighlightingCalculator;
+import org.eclipse.xtext.ide.server.symbol.DocumentSymbolMapper;
+import org.eclipse.xtext.resource.IDefaultResourceDescriptionStrategy;
 
 /**
  * Use this class to register ide components.
@@ -16,5 +18,13 @@ public class BuildfileDSLIdeModule extends AbstractBuildfileDSLIdeModule {
 
 	public Class<? extends ISemanticHighlightingCalculator> bindISemanticHighlightingCalculator() {
 		return BuildfileDSLSemanticHighlightingCalculator.class;
+	}
+
+	public Class<? extends DocumentSymbolMapper.DocumentSymbolNameProvider> bindDocumentSymbolNameProvider() {
+		return BuildfileDSLDocumentSymbolNameProvider.class;
+	}
+
+	public Class<? extends IDefaultResourceDescriptionStrategy> bindIDefaultResourceDescriptionStrategy() {
+		return BuildfileDSLResourceDescriptionStrategy.class;
 	}
 }

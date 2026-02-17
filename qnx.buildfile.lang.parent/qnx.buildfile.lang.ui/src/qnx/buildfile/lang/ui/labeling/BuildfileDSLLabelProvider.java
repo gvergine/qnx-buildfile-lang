@@ -7,25 +7,60 @@ import com.google.inject.Inject;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.xtext.ui.label.DefaultEObjectLabelProvider;
 
+import qnx.buildfile.lang.buildfileDSL.AttributeStatement;
+import qnx.buildfile.lang.buildfileDSL.BooleanAttribute;
+import qnx.buildfile.lang.buildfileDSL.DeploymentStatement;
+import qnx.buildfile.lang.buildfileDSL.ValuedAttribute;
+import qnx.buildfile.lang.ide.BuildfileDSLOutlineLabels;
+
 /**
- * Provides labels for EObjects.
- * 
+ * Provides labels and icons for EObjects displayed in the Eclipse outline view.
+ * <p>
+ * Labels are computed via the shared {@link BuildfileDSLOutlineLabels} utility
+ * (also used by the LSP document symbol provider).
+ *
  * See https://www.eclipse.org/Xtext/documentation/310_eclipse_support.html#label-provider
  */
 public class BuildfileDSLLabelProvider extends DefaultEObjectLabelProvider {
 
-	@Inject
-	public BuildfileDSLLabelProvider(AdapterFactoryLabelProvider delegate) {
-		super(delegate);
-	}
+    @Inject
+    public BuildfileDSLLabelProvider(AdapterFactoryLabelProvider delegate) {
+        super(delegate);
+    }
 
-	// Labels and icons can be computed like this:
-	
-//	String text(Greeting ele) {
-//		return "A greeting to " + ele.getName();
-//	}
-//
-//	String image(Greeting ele) {
-//		return "Greeting.gif";
-//	}
+    // ── Text labels ───────────────────────────────────────────────
+
+    public String text(AttributeStatement stmt) {
+        return BuildfileDSLOutlineLabels.getAttributeStatementLabel(stmt);
+    }
+
+    public String text(DeploymentStatement stmt) {
+        return BuildfileDSLOutlineLabels.getDeploymentLabel(stmt);
+    }
+
+    public String text(BooleanAttribute attr) {
+        return BuildfileDSLOutlineLabels.formatAttribute(attr);
+    }
+
+    public String text(ValuedAttribute attr) {
+        return BuildfileDSLOutlineLabels.formatAttribute(attr);
+    }
+
+    // ── Icons ─────────────────────────────────────────────────────
+
+    public String image(AttributeStatement stmt) {
+        return "attribute_stmt.png";
+    }
+
+    public String image(DeploymentStatement stmt) {
+        return "deployment_stmt.png";
+    }
+
+    public String image(BooleanAttribute attr) {
+        return "boolean_attr.png";
+    }
+
+    public String image(ValuedAttribute attr) {
+        return "valued_attr.png";
+    }
 }

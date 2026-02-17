@@ -1,6 +1,5 @@
 package qnx.buildfile.lang.validation;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;

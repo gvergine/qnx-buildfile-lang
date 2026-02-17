@@ -3,13 +3,72 @@
  */
 package qnx.buildfile.lang.ui.outline;
 
+import org.eclipse.xtext.ui.editor.outline.IOutlineNode;
 import org.eclipse.xtext.ui.editor.outline.impl.DefaultOutlineTreeProvider;
 
+import qnx.buildfile.lang.buildfileDSL.AttributeStatement;
+import qnx.buildfile.lang.buildfileDSL.BooleanAttribute;
+import qnx.buildfile.lang.buildfileDSL.DeploymentStatement;
+import qnx.buildfile.lang.buildfileDSL.Model;
+import qnx.buildfile.lang.buildfileDSL.ValuedAttribute;
+
 /**
- * Customization of the default outline structure.
+ * Outline structure for QNX buildfiles in Eclipse.
+ * <p>
+ * Produces a flat list of:
+ * <ul>
+ *   <li><b>Attribute statements</b> — shown as {@code [+optional]} or {@code [uid=0 gid=0]},
+ *       with individual attributes as leaf children</li>
+ *   <li><b>Deployment statements</b> — shown by their target path (e.g. {@code bin/myapp}),
+ *       with attributes as leaf children</li>
+ * </ul>
  *
  * See https://www.eclipse.org/Xtext/documentation/310_eclipse_support.html#outline
  */
 public class BuildfileDSLOutlineTreeProvider extends DefaultOutlineTreeProvider {
 
+    /**
+     * Create children directly from the Model — each Statement becomes a top-level node.
+     */
+    protected void _createChildren(IOutlineNode parentNode, Model model) {
+        for (var statement : model.getStatements()) {
+            createNode(parentNode, statement);
+        }
+    }
+
+    /**
+     * AttributeStatement: create child nodes for each individual attribute.
+     */
+    protected void _createChildren(IOutlineNode parentNode, AttributeStatement stmt) {
+        if (stmt.getAttributesection() != null) {
+            for (var attr : stmt.getAttributesection().getAttributes()) {
+                createNode(parentNode, attr);
+            }
+        }
+    }
+
+    /**
+     * DeploymentStatement: create child nodes for each attribute in the section.
+     */
+    protected void _createChildren(IOutlineNode parentNode, DeploymentStatement stmt) {
+        if (stmt.getAttributesection() != null) {
+            for (var attr : stmt.getAttributesection().getAttributes()) {
+                createNode(parentNode, attr);
+            }
+        }
+    }
+
+    /**
+     * BooleanAttribute is a leaf — no children.
+     */
+    protected boolean _isLeaf(BooleanAttribute attr) {
+        return true;
+    }
+
+    /**
+     * ValuedAttribute is a leaf — no children.
+     */
+    protected boolean _isLeaf(ValuedAttribute attr) {
+        return true;
+    }
 }

@@ -37,8 +37,8 @@ public class BuildfileDSLProposalProvider extends AbstractBuildfileDSLProposalPr
 		KNOWN_VALUES.put("type", Arrays.asList("link", "fifo", "file", "dir"));
 		KNOWN_VALUES.put("autoso", Arrays.asList("none", "list", "add"));
 		KNOWN_VALUES.put("compress", Arrays.asList("1", "2", "3"));
-		KNOWN_VALUES.put("code", Arrays.asList("uip", "u", "copy", "c"));
-		KNOWN_VALUES.put("data", Arrays.asList("uip", "u", "copy", "c"));
+		KNOWN_VALUES.put("code", Arrays.asList("u", "c"));
+		KNOWN_VALUES.put("data", Arrays.asList("u", "c"));
 	}
 
 	/**

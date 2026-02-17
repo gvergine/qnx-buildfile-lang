@@ -147,7 +147,9 @@ public class JarLoader {
      */
     public static class JarLoadException extends Exception {
         
-        public JarLoadException(String message) {
+        private static final long serialVersionUID = 5296483164827887781L;
+
+		public JarLoadException(String message) {
             super(message);
         }
 

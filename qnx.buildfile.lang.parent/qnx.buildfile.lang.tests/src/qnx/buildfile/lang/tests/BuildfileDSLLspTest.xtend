@@ -1,14 +1,13 @@
 package qnx.buildfile.lang.tests
 
 import com.google.inject.Inject
+import org.eclipse.xtext.diagnostics.Severity
 import org.eclipse.xtext.testing.InjectWith
 import org.eclipse.xtext.testing.extensions.InjectionExtension
 import org.eclipse.xtext.testing.util.ParseHelper
-import org.eclipse.xtext.testing.validation.ValidationTestHelper
-import org.eclipse.xtext.validation.IResourceValidator
-import org.eclipse.xtext.validation.CheckMode
 import org.eclipse.xtext.util.CancelIndicator
-import org.eclipse.xtext.diagnostics.Severity
+import org.eclipse.xtext.validation.CheckMode
+import org.eclipse.xtext.validation.IResourceValidator
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.^extension.ExtendWith
 import qnx.buildfile.lang.buildfileDSL.Model
@@ -25,7 +24,6 @@ import static org.junit.jupiter.api.Assertions.*
 @InjectWith(BuildfileDSLInjectorProvider)
 class BuildfileDSLLspTest {
 	@Inject ParseHelper<Model> parseHelper
-	@Inject ValidationTestHelper validationHelper
 	@Inject IResourceValidator resourceValidator
 
 	// ── No diagnostics for valid input ────────────────────────────
