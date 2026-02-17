@@ -3,6 +3,11 @@
  */
 package qnx.buildfile.lang;
 
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.xtext.resource.IResourceFactory;
+import org.eclipse.xtext.resource.IResourceServiceProvider;
+
+import com.google.inject.Injector;
 
 /**
  * Initialization support for running Xtext languages without Equinox extension registry.
@@ -11,5 +16,20 @@ public class BuildfileDSLStandaloneSetup extends BuildfileDSLStandaloneSetupGene
 
 	public static void doSetup() {
 		new BuildfileDSLStandaloneSetup().createInjectorAndDoEMFRegistration();
+	}
+
+	@Override
+	public void register(Injector injector) {
+		super.register(injector);
+
+		// Register a wildcard resource factory so the LSP server can handle files
+		// with any extension (e.g. .buil, .buildfile, or no extension at all).
+		// In Eclipse, file associations are managed by plugin.xml, so this only
+		// affects standalone / LSP usage.
+		IResourceFactory resourceFactory = injector.getInstance(IResourceFactory.class);
+		IResourceServiceProvider serviceProvider = injector.getInstance(IResourceServiceProvider.class);
+
+		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().putIfAbsent("*", resourceFactory);
+		IResourceServiceProvider.Registry.INSTANCE.getExtensionToFactoryMap().putIfAbsent("*", serviceProvider);
 	}
 }

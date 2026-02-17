@@ -18,6 +18,7 @@
         "id": "qnx-buildfile-lang",
         "aliases": ["QNX Buildfile"],
         "extensions": [".build"],
+        "filenamePatterns": ["*.build"],
         "configuration": "./language-configuration.json"
       }
     ],

@@ -3,10 +3,92 @@
  */
 package qnx.buildfile.lang.ui.contentassist;
 
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jface.text.contentassist.ICompletionProposal;
+import org.eclipse.xtext.Assignment;
+import org.eclipse.xtext.ui.editor.contentassist.ConfigurableCompletionProposal;
+import org.eclipse.xtext.ui.editor.contentassist.ContentAssistContext;
+import org.eclipse.xtext.ui.editor.contentassist.ICompletionProposalAcceptor;
+
+import qnx.buildfile.lang.attributes.AttributeKeywords;
+import qnx.buildfile.lang.buildfileDSL.ValuedAttribute;
 
 /**
- * See https://www.eclipse.org/Xtext/documentation/310_eclipse_support.html#content-assist
- * on how to customize the content assistant.
+ * Content assist proposals for BuildfileDSL.
+ * <p>
+ * Provides auto-completion for:
+ * <ul>
+ *   <li>Boolean attribute names (after {@code +} or {@code -})</li>
+ *   <li>Valued attribute names (before {@code =})</li>
+ *   <li>Known values for specific attributes ({@code type}, {@code autoso}, {@code compress})</li>
+ * </ul>
  */
 public class BuildfileDSLProposalProvider extends AbstractBuildfileDSLProposalProvider {
+
+	/** Known values for valued attributes that have a fixed set of options. */
+	private static final Map<String, List<String>> KNOWN_VALUES = new LinkedHashMap<>();
+
+	static {
+		KNOWN_VALUES.put("type", Arrays.asList("link", "fifo", "file", "dir"));
+		KNOWN_VALUES.put("autoso", Arrays.asList("none", "list", "add"));
+		KNOWN_VALUES.put("compress", Arrays.asList("1", "2", "3"));
+		KNOWN_VALUES.put("code", Arrays.asList("uip", "u", "copy", "c"));
+		KNOWN_VALUES.put("data", Arrays.asList("uip", "u", "copy", "c"));
+	}
+
+	/**
+	 * Propose boolean attribute names after + or - inside [...].
+	 */
+	@Override
+	public void completeBooleanAttribute_Name(EObject model, Assignment assignment,
+			ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+		for (String keyword : AttributeKeywords.ALL_BOOLEAN_ATTRIBUTE_KEYWORDS) {
+			ICompletionProposal proposal = createCompletionProposal(keyword, keyword, null, context);
+			acceptor.accept(proposal);
+		}
+	}
+
+	/**
+	 * Propose valued attribute names (the part before =) inside [...].
+	 * Each proposal includes the trailing = to speed up typing.
+	 */
+	@Override
+	public void completeValuedAttribute_Name(EObject model, Assignment assignment,
+			ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+		for (String keyword : AttributeKeywords.ALL_VALUED_ATTRIBUTE_KEYWORDS) {
+			String proposalText = keyword + "=";
+			ICompletionProposal proposal = createCompletionProposal(proposalText, keyword, null, context);
+			// Place cursor after the = sign
+			if (proposal instanceof ConfigurableCompletionProposal) {
+				((ConfigurableCompletionProposal) proposal).setCursorPosition(proposalText.length());
+			}
+			acceptor.accept(proposal);
+		}
+	}
+
+	/**
+	 * Propose known values for attributes that have a fixed set of options
+	 * (e.g. type=link|fifo|file|dir).
+	 */
+	@Override
+	public void completeValuedAttribute_Value(EObject model, Assignment assignment,
+			ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+		if (model instanceof ValuedAttribute) {
+			String attrName = ((ValuedAttribute) model).getName();
+			if (attrName != null && KNOWN_VALUES.containsKey(attrName)) {
+				for (String value : KNOWN_VALUES.get(attrName)) {
+					ICompletionProposal proposal = createCompletionProposal(value, value, null, context);
+					acceptor.accept(proposal);
+				}
+				return;
+			}
+		}
+		// Fall back to default for attributes without known values
+		super.completeValuedAttribute_Value(model, assignment, context, acceptor);
+	}
 }

@@ -15,14 +15,16 @@ Require-Bundle: org.eclipse.xtext,
  org.antlr.runtime;bundle-version="[3.2.0,3.2.1)"
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: qnx.buildfile.lang,
- qnx.buildfile.lang.buildfileDSL.util,
- qnx.buildfile.lang.generator,
- qnx.buildfile.lang.serializer,
- qnx.buildfile.lang.scoping,
+ qnx.buildfile.lang.attributes,
  qnx.buildfile.lang.buildfileDSL,
- qnx.buildfile.lang.validation,
- qnx.buildfile.lang.services,
  qnx.buildfile.lang.buildfileDSL.impl,
+ qnx.buildfile.lang.buildfileDSL.util,
+ qnx.buildfile.lang.formatting2,
+ qnx.buildfile.lang.generator,
+ qnx.buildfile.lang.parser.antlr,
  qnx.buildfile.lang.parser.antlr.internal,
- qnx.buildfile.lang.parser.antlr
+ qnx.buildfile.lang.scoping,
+ qnx.buildfile.lang.serializer,
+ qnx.buildfile.lang.services,
+ qnx.buildfile.lang.validation
 Import-Package: org.apache.log4j

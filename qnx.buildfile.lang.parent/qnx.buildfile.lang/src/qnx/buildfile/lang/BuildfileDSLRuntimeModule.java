@@ -3,9 +3,16 @@
  */
 package qnx.buildfile.lang;
 
+import org.eclipse.xtext.formatting2.IFormatter2;
+
+import qnx.buildfile.lang.formatting2.BuildfileDSLFormatter;
 
 /**
  * Use this class to register components to be used at runtime / without the Equinox extension registry.
  */
 public class BuildfileDSLRuntimeModule extends AbstractBuildfileDSLRuntimeModule {
+
+	public Class<? extends IFormatter2> bindIFormatter2() {
+		return BuildfileDSLFormatter.class;
+	}
 }

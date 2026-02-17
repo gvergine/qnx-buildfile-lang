@@ -39,14 +39,9 @@ public class AttributeValueChecker {
 				checkMethods.get(methodName).invoke(null, valuedAttribute, buildfileDSLValidator);
 			}
 		}
-		catch (SecurityException e)
+		catch (Exception e)
 		{
-		}
-		catch (IllegalAccessException e)
-		{
-		}
-		catch (InvocationTargetException e)
-		{
+			e.printStackTrace();
 		}
 	}
 
@@ -69,12 +64,56 @@ public class AttributeValueChecker {
 		}
 	}
 
+
+
+	/**
+	 * Checks if the value is a valid perms/dperms specification.
+	 *
+	 * @param value the attribute value
+	 * @return true if the value is valid
+	 */
+	private static boolean isValidPerms(String value)
+	{
+		if (value == null) return false;
+
+		// Wildcard — inherit from host
+		if (value.equals("*")) return true;
+
+		// Octal format: 3 or 4 octal digits (optionally starting with 0)
+		if (value.matches("0?[0-7]{3}")) return true;
+
+		// Symbolic mode: one or more comma-separated clauses
+		// Each clause: [ugoa]*[+-=][rwxst]+
+		// Examples: a+xr, u=rwx,g=rx,o=rx, +x, ug+rw
+		return isValidSymbolicMode(value);
+	}
+
+	/**
+	 * Validates a chmod-like symbolic mode string as used by QNX mkifs.
+	 * <p>
+	 * Format: one or more comma-separated clauses, each being {@code [ugoa]*[+-=][rwxst]+}
+	 */
+	private static boolean isValidSymbolicMode(String value)
+	{
+		if (value == null || value.isEmpty()) return false;
+
+		String[] clauses = value.split(",", -1);
+		for (String clause : clauses)
+		{
+			if (!clause.matches("[ugoa]*[+=\\-][rwxst]+"))
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+
 	/* Checks */
 	public static void check_uid(ValuedAttribute valuedAttribute, BaseDSLValidator buildfileDSLValidator)
 	{
 		if (!isValidUidOrGid(valuedAttribute.getValue()))
 		{
-			buildfileDSLValidator.reportError("Wrong format\"" + valuedAttribute.getValue() + "\" for uid",
+			buildfileDSLValidator.reportError("Wrong format \"" + valuedAttribute.getValue() + "\" for uid",
 					BuildfileDSLPackage.Literals.VALUED_ATTRIBUTE__VALUE,
 					"invalidUid");
 		}	
@@ -84,7 +123,7 @@ public class AttributeValueChecker {
 	{
 		if (!isValidUidOrGid(valuedAttribute.getValue()))
 		{
-			buildfileDSLValidator.reportError("Wrong format\"" + valuedAttribute.getValue() + "\" for gid",
+			buildfileDSLValidator.reportError("Wrong format \"" + valuedAttribute.getValue() + "\" for gid",
 					BuildfileDSLPackage.Literals.VALUED_ATTRIBUTE__VALUE,
 					"invalidGid");
 		}
@@ -95,7 +134,7 @@ public class AttributeValueChecker {
 	{
 		if (!AUTOSO_VALUES.contains(valuedAttribute.getValue()))
 		{
-			buildfileDSLValidator.reportError("Wrong format\"" + valuedAttribute.getValue() + "\" for autoso (n[one]|l[ist]|a[dd])",
+			buildfileDSLValidator.reportError("Wrong format \"" + valuedAttribute.getValue() + "\" for autoso (n[one]|l[ist]|a[dd])",
 					BuildfileDSLPackage.Literals.VALUED_ATTRIBUTE__VALUE,
 					"invalidAutoso");
 		}
@@ -106,7 +145,7 @@ public class AttributeValueChecker {
 	{
 		if (!COMPRESS_VALUES.contains(valuedAttribute.getValue()))
 		{
-			buildfileDSLValidator.reportError("Wrong format\"" + valuedAttribute.getValue() + "\" for compress (1|2|3)",
+			buildfileDSLValidator.reportError("Wrong format \"" + valuedAttribute.getValue() + "\" for compress (1|2|3)",
 					BuildfileDSLPackage.Literals.VALUED_ATTRIBUTE__VALUE,
 					"invalidCompress");
 		}
@@ -124,4 +163,26 @@ public class AttributeValueChecker {
 	}
 
 
+	public static void check_perms(ValuedAttribute valuedAttribute, BaseDSLValidator buildfileDSLValidator)
+	{
+		if (!isValidPerms(valuedAttribute.getValue()))
+		{
+			buildfileDSLValidator.reportError("Wrong format \"" + valuedAttribute.getValue()
+			+ "\" for perms (expected *, octal e.g. 0755, or symbolic e.g. a+rwx)",
+			BuildfileDSLPackage.Literals.VALUED_ATTRIBUTE__VALUE,
+					"invalidPerms");
+		}
+	}
+
+
+	public static void check_dperms(ValuedAttribute valuedAttribute, BaseDSLValidator buildfileDSLValidator)
+	{
+		if (!isValidPerms(valuedAttribute.getValue()))
+		{
+			buildfileDSLValidator.reportError("Wrong format \"" + valuedAttribute.getValue()
+			+ "\" for dperms (expected *, octal e.g. 0755, or symbolic e.g. a+rwx)",
+			BuildfileDSLPackage.Literals.VALUED_ATTRIBUTE__VALUE,
+					"invalidDperms");
+		}
+	}
 }

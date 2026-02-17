@@ -4,9 +4,11 @@
 package qnx.buildfile.lang.ui;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.xtext.formatting2.IFormatter2;
 import org.eclipse.xtext.ide.editor.syntaxcoloring.ISemanticHighlightingCalculator;
 import org.eclipse.xtext.ui.editor.syntaxcoloring.IHighlightingConfiguration;
 
+import qnx.buildfile.lang.formatting2.BuildfileDSLFormatter;
 import qnx.buildfile.lang.ide.BuildfileDSLSemanticHighlightingCalculator;
 import qnx.buildfile.lang.validation.CustomValidatorJarPathProvider;
 
@@ -40,4 +42,5 @@ public class BuildfileDSLUiModule extends AbstractBuildfileDSLUiModule {
 	public Class<? extends ISemanticHighlightingCalculator> bindISemanticHighlightingCalculator() {
 		return BuildfileDSLSemanticHighlightingCalculator.class;
 	}
+
 }
