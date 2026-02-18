@@ -1,5 +1,7 @@
 # qnx-buildfile-lang
 
+![](documentation/images/vscode_plugin.gif)
+
 This is an Xtext-based grammar for parsing QNX buildfiles. 
 
 The rest of this README is for developers who want to contribute to the grammar. If you are a developer interested in using it, please go to https://gvergine.github.io/qnx-buildfile-lang
