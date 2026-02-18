@@ -111,9 +111,6 @@ public class BuildfileDSLIdeContentProposalProvider extends IdeContentProposalPr
                 return;
             }
         }
-        // Fall back to default
-        super._createProposals(
-                (Assignment) context.getCurrentNode().getGrammarElement(),
-                context, acceptor);
+
     }
 }
