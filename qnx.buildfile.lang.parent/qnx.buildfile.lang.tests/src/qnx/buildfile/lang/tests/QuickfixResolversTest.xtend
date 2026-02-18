@@ -106,7 +106,7 @@ class QuickfixResolversTest {
 
 	@Test
 	def void caseInsensitiveMatching() {
-		val suggestions = BuildfileDSLQuickfixResolvers.suggestAttributeNames("PERMS")
+		val suggestions = BuildfileDSLQuickfixResolvers.suggestAttributeNames("PERM")
 		assertTrue(suggestions.stream.anyMatch[keyword == "perms"],
 			'''Should match case-insensitively but got: «suggestions.map[keyword].join(", ")»''')
 	}
@@ -135,7 +135,7 @@ class QuickfixResolversTest {
 
 	@Test
 	def void levenshteinTransposition() {
-		assertEquals(2, BuildfileDSLQuickfixResolvers.levenshteinDistance("permjs", "perms"))
+		assertEquals(2, BuildfileDSLQuickfixResolvers.levenshteinDistance("prems", "perms"))
 	}
 
 	@Test

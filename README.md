@@ -2,7 +2,12 @@
 
 ![](documentation/images/vscode_plugin.gif)
 
-This is an Xtext-based grammar for parsing QNX buildfiles. 
+qnx-buildfile-lang is an open-source toolkit for QNX buildfiles (.build). It provides:
+
+- **VS Code extension**: real-time validation, content assist, quickfixes, outline, syntax highlighting
+- **Eclipse plugin**: same features for Eclipse-based workflows
+- **CLI validator**: validate buildfiles from the command line or CI pipelines
+- **Java library**: parse, validate, and manipulate buildfiles programmatically  
 
 The rest of this README is for developers who want to contribute to the grammar. If you are a developer interested in using it, please go to https://gvergine.github.io/qnx-buildfile-lang
 

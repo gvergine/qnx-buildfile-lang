@@ -68,7 +68,7 @@ This project was built to make QNX development smoother, more reliable, and more
 
 | Outline view
 | icon:check[]
-|
+| icon:check[]
 |
 |
 
@@ -86,7 +86,7 @@ This project was built to make QNX development smoother, more reliable, and more
 
 | Quick fixes
 | icon:check[]
-| 
+| icon:check[]
 |
 |
 |===
@@ -465,6 +465,29 @@ walker.walk(model, new IWalker() {
 <<<
 
 == Changelog
+
+=== 1.1.0
+
+==== Content Assist for VSCode
+
+* *VSCode*: content assist now proposes boolean attribute names (after +/-), valued attribute names (with trailing =), and known values for attributes like type, autoso, compress, code, and data.
+Eclipse already had this; VSCode now matches the same proposal set.
+
+==== Outline / Symbol Navigation
+
+* *VSCode*: new document outline showing deployment statements and attribute statements as top-level entries, with individual attributes as children.
+* *Eclipse*: matching outline tree with custom icons for each node type (attribute statements, deployments, boolean attributes, valued attributes).
+* Both editors support breadcrumb navigation and Go to Symbol.
+
+==== Quick Fixes for VSCode
+
+* *VSCode*: quick fixes now suggest closest matching attribute names for typos using Levenshtein distance (e.g. permjs → perms). The first suggestion is marked as preferred for one-click apply.
+Eclipse already had this; the underlying suggestion logic is now shared between both editors.
+
+==== Standalone Validator Example
+
+New examples/standalone-validator project demonstrating the full library pipeline: parsing, ${VAR} substitution from environment variables, validation (standard or custom), and directory deployment analysis with file-level replacement suggestions.
+Supports --strict-vars (fail on unresolved variables), -W (fail on warnings), -e KEY=VALUE (extra variables), and -r (report file output).
 
 === 1.0.8
 
