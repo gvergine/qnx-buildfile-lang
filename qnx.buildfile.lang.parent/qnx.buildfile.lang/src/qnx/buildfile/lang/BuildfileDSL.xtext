@@ -32,7 +32,7 @@ BooleanAttribute:
 ;
 
 ValuedAttribute:
-	name=ALMOST_ANYTHING '=' value=ALMOST_ANYTHING
+	name=ALMOST_ANYTHING '=' (value=ALMOST_ANYTHING)?
 ;
 
 Path:
@@ -52,13 +52,23 @@ terminal VARREF:
 	'${' ('\\}'| !'}')* '}'
 ;
 
+terminal PERMISSIONS:
+	('u'|'g'|'o'|'a')+'='('r'|'w'|'x'|'t')+
+;
+
+terminal ANYTHING:
+	(PERMISSIONS|STRING | VARREF | ID |INT | '.' | '/' | '*')	
+;
+
+terminal EXTENDED_ANYTHING:
+	(ANYTHING | '-'| '+' |',' | ':' )	
+;
+
 terminal ALMOST_ANYTHING:
-	(STRING | VARREF | ID |INT | '.' | '/' | '*')
-	(STRING | VARREF | ID |INT | '.' | '/' | '*' | '-'| '+' |',' | ':')*
+	ANYTHING (EXTENDED_ANYTHING)*
 ;
 
 terminal BLOCK:
-//	'{' NL ('\\}'| !'}')* NL '}'
     '{' NL ( ('\\}'| !'}')* NL )? '}'
 ;
 
@@ -66,4 +76,5 @@ terminal BLOCK:
 terminal WS: (' ' | '\t')+;
 
 terminal NL: '\r'? '\n';
+
 
