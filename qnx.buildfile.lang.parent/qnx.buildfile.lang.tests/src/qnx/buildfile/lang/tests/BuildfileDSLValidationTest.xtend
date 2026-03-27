@@ -237,7 +237,7 @@ class BuildfileDSLValidationTest {
 
 	@Test
 	def void validTypeValues() {
-		for (v : #["link", "fifo", "file", "dir"]) {
+		for (v : #["link", "hlink", "fifo", "file", "dir"]) {
 			val model = parseHelper.parse('''[type=«v»]''')
 			validationHelper.assertNoError(model, "invalidType")
 		}

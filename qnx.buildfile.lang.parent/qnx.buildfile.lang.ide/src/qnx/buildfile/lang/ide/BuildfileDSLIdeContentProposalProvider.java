@@ -33,7 +33,7 @@ public class BuildfileDSLIdeContentProposalProvider extends IdeContentProposalPr
     private static final Map<String, List<String>> KNOWN_VALUES = new LinkedHashMap<>();
 
     static {
-        KNOWN_VALUES.put("type", Arrays.asList("link", "fifo", "file", "dir"));
+        KNOWN_VALUES.put("type", Arrays.asList("link", "hlink", "fifo", "file", "dir"));
         KNOWN_VALUES.put("autoso", Arrays.asList("none", "list", "add"));
         KNOWN_VALUES.put("compress", Arrays.asList("1", "2", "3"));
         KNOWN_VALUES.put("code", Arrays.asList("u", "c"));

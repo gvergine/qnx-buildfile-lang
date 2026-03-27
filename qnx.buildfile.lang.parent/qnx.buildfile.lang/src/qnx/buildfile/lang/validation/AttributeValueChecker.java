@@ -150,12 +150,12 @@ public class AttributeValueChecker {
 		}
 	}
 
-	private final static List<String> TYPE_VALUES = Arrays.asList("link","fifo","file","dir");
+	private final static List<String> TYPE_VALUES = Arrays.asList("link","hlink","fifo","file","dir");
 	public static void check_type(ValuedAttribute valuedAttribute, BaseDSLValidator buildfileDSLValidator)
 	{
 		if (!TYPE_VALUES.contains(valuedAttribute.getValue()))
 		{
-			buildfileDSLValidator.reportError("Wrong format\"" + valuedAttribute.getValue() + "\" for type {link|fifo|file|dir)",
+			buildfileDSLValidator.reportError("Wrong format\"" + valuedAttribute.getValue() + "\" for type {link|hlink|fifo|file|dir)",
 					BuildfileDSLPackage.Literals.VALUED_ATTRIBUTE__VALUE,
 					"invalidType");
 		}
